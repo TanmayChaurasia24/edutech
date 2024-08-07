@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.signUp = void 0;
+exports.fetchAllTeachers = exports.fetchAllStudents = exports.Login = exports.signUp = void 0;
 const userSchema_1 = require("../schemas/userSchema");
 const userModel_1 = __importDefault(require("../models/userModel"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
@@ -52,3 +52,43 @@ const signUp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.signUp = signUp;
+const Login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { username, password, email } = req.body;
+    console.log(username, password);
+    try {
+        // Find the user by username
+        const check_user = yield userModel_1.default.findOne({ username: username });
+        console.log(check_user);
+        // If user is not found, return an error
+        if (!check_user) {
+            return res.status(400).json({ message: 'No user with this username exists' });
+        }
+        // Compare the provided password with the hashed password in the database
+        const isPasswordCorrect = yield bcrypt_1.default.compare(password, check_user.password);
+        // If the password is incorrect, return an error
+        if (!isPasswordCorrect) {
+            return res.status(400).json({ message: 'Invalid credentials' });
+        }
+        // If authentication is successful, return a success message (you may also want to return a token)
+        return res.status(200).json({ message: 'Login successful', user: check_user });
+    }
+    catch (err) {
+        console.error('Error during login:', err);
+        return res.status(500).json({ message: 'Internal Server Error' });
+    }
+});
+exports.Login = Login;
+const fetchAllStudents = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    // Fetch all students from the database
+    const students = yield userModel_1.default.find({ role: 'student' });
+    const num_students = yield userModel_1.default.countDocuments({ role: 'student' });
+    return res.status(200).json({ students, num_students });
+});
+exports.fetchAllStudents = fetchAllStudents;
+const fetchAllTeachers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    // Fetch all students from the database
+    const teacher = yield userModel_1.default.find({ role: 'teacher' });
+    const num_teacher = yield userModel_1.default.countDocuments({ role: 'teacher' });
+    return res.status(200).json({ teacher, num_teacher });
+});
+exports.fetchAllTeachers = fetchAllTeachers;
