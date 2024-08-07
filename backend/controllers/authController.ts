@@ -45,3 +45,46 @@ export const signUp = async (req: Request, res: Response) => {
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 };
+
+export const Login = async (req: Request, res: Response) => {
+  const { username, password, email } = req.body;
+  console.log(username, password);
+
+  try {
+    // Find the user by username
+    const check_user = await UserModel.findOne({ username: username});
+    console.log(check_user);
+
+    // If user is not found, return an error
+    if (!check_user) {
+      return res.status(400).json({ message: 'No user with this username exists' });
+    }
+
+    // Compare the provided password with the hashed password in the database
+    const isPasswordCorrect = await bcrypt.compare(password, check_user.password);
+    
+    // If the password is incorrect, return an error
+    if (!isPasswordCorrect) {
+      return res.status(400).json({ message: 'Invalid credentials' });
+    }
+
+    // If authentication is successful, return a success message (you may also want to return a token)
+    return res.status(200).json({ message: 'Login successful', user: check_user });
+  } catch (err) {
+    console.error('Error during login:', err);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+export const fetchAllStudents = async(req: Request, res: Response) => {
+  // Fetch all students from the database
+  const students = await UserModel.find({role: 'student'})
+  const num_students = await UserModel.countDocuments({role: 'student'});
+  return res.status(200).json({ students, num_students });
+}
+export const fetchAllTeachers = async(req: Request, res: Response) => {
+  // Fetch all students from the database
+  const teacher = await UserModel.find({role: 'teacher'})
+  const num_teacher = await UserModel.countDocuments({role: 'teacher'});
+  return res.status(200).json({ teacher, num_teacher });
+}
