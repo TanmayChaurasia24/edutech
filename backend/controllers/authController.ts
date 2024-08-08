@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { userSchema } from '../schemas/userSchema';
 import UserModel from '../models/userModel';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 export const signUp = async (req: Request, res: Response) => {
   const detail = req.body;
@@ -68,8 +69,9 @@ export const Login = async (req: Request, res: Response) => {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
-    // If authentication is successful, return a success message (you may also want to return a token)
-    return res.status(200).json({ message: 'Login successful', user: check_user });
+    const token = jwt.sign({id: check_user._id , role: check_user.role},'your_jwt_secret',{expiresIn:'24h'});
+
+    return res.status(201).json({token})
   } catch (err) {
     console.error('Error during login:', err);
     return res.status(500).json({ message: 'Internal Server Error' });
@@ -83,7 +85,7 @@ export const fetchAllStudents = async(req: Request, res: Response) => {
   return res.status(200).json({ students, num_students });
 }
 export const fetchAllTeachers = async(req: Request, res: Response) => {
-  // Fetch all students from the database
+  // Fetch all teachers from the database
   const teacher = await UserModel.find({role: 'teacher'})
   const num_teacher = await UserModel.countDocuments({role: 'teacher'});
   return res.status(200).json({ teacher, num_teacher });
