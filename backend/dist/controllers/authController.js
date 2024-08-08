@@ -16,6 +16,7 @@ exports.fetchAllTeachers = exports.fetchAllStudents = exports.Login = exports.si
 const userSchema_1 = require("../schemas/userSchema");
 const userModel_1 = __importDefault(require("../models/userModel"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const signUp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const detail = req.body;
     console.log(detail);
@@ -69,8 +70,8 @@ const Login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         if (!isPasswordCorrect) {
             return res.status(400).json({ message: 'Invalid credentials' });
         }
-        // If authentication is successful, return a success message (you may also want to return a token)
-        return res.status(200).json({ message: 'Login successful', user: check_user });
+        const token = jsonwebtoken_1.default.sign({ id: check_user._id, role: check_user.role }, 'your_jwt_secret', { expiresIn: '24h' });
+        return res.status(201).json({ token });
     }
     catch (err) {
         console.error('Error during login:', err);
@@ -86,7 +87,7 @@ const fetchAllStudents = (req, res) => __awaiter(void 0, void 0, void 0, functio
 });
 exports.fetchAllStudents = fetchAllStudents;
 const fetchAllTeachers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    // Fetch all students from the database
+    // Fetch all teachers from the database
     const teacher = yield userModel_1.default.find({ role: 'teacher' });
     const num_teacher = yield userModel_1.default.countDocuments({ role: 'teacher' });
     return res.status(200).json({ teacher, num_teacher });

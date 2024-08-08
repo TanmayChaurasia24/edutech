@@ -2,6 +2,7 @@ import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import mongoconnect from './db.js';
 import authRoutes from './routes/userRoutes.js'; // Ensure the path is correct
+import courseRoutes from './routes/courseRoutes.js'
 
 const PORT = 8000;
 
@@ -16,6 +17,7 @@ app.use(express.json());
 
 // Routes
 app.use('/api/user', authRoutes);
+app.use('/api/course', courseRoutes);
 
 // Error handling middleware
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
