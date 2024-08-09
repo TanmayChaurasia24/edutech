@@ -8,6 +8,7 @@ const cors_1 = __importDefault(require("cors"));
 const db_js_1 = __importDefault(require("./db.js"));
 const userRoutes_js_1 = __importDefault(require("./routes/userRoutes.js")); // Ensure the path is correct
 const courseRoutes_js_1 = __importDefault(require("./routes/courseRoutes.js"));
+const articleRoutes_js_1 = __importDefault(require("./routes/articleRoutes.js"));
 const PORT = 8000;
 // Connect to the database
 (0, db_js_1.default)();
@@ -18,6 +19,7 @@ app.use(express_1.default.json());
 // Routes
 app.use('/api/user', userRoutes_js_1.default);
 app.use('/api/course', courseRoutes_js_1.default);
+app.use('/api/article', articleRoutes_js_1.default);
 // Error handling middleware
 app.use((err, req, res, next) => {
     console.error(err.stack);

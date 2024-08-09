@@ -4,4 +4,5 @@ const express_1 = require("express");
 const courseController_1 = require("../controllers/courseController");
 const router = (0, express_1.Router)();
 router.post('/create', courseController_1.createCourse);
+router.get('/all', courseController_1.fetchAllCourse);
 exports.default = router;

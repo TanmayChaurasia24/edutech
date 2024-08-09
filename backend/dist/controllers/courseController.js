@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createCourse = void 0;
+exports.fetchAllCourse = exports.createCourse = void 0;
 const courseModel_1 = __importDefault(require("../models/courseModel"));
 const courseSchema_1 = require("../schemas/courseSchema");
 const createCourse = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -38,3 +38,14 @@ const createCourse = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     }
 });
 exports.createCourse = createCourse;
+const fetchAllCourse = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const fetchall = yield courseModel_1.default.find();
+        const numberOfCourses = yield courseModel_1.default.countDocuments();
+        return res.status(200).json({ fetchall, numberOfCourses });
+    }
+    catch (error) {
+        return res.status(500).json({ message: "internal server error" });
+    }
+});
+exports.fetchAllCourse = fetchAllCourse;
