@@ -12,10 +12,10 @@ export const signUp = async (req: Request, res: Response) => {
   if (!result.success) {
     return res.status(400).json(result.error.errors);
   }
-  console.log(result);
+  // console.log(result);
 
   const newUser = result.data;
-  console.log("user: ", newUser);
+  // console.log("user: ", newUser);
   
   newUser.password = await bcrypt.hash(newUser.password, 10);
 
@@ -34,7 +34,8 @@ export const signUp = async (req: Request, res: Response) => {
     if (existingUserByEmail) {
       return res.status(400).json({ message: 'Email already exists' });
     }
-
+    console.log(newUser);
+    
     const savedUser = await UserModel.create(newUser);
 
     return res.status(201).json({
@@ -48,13 +49,13 @@ export const signUp = async (req: Request, res: Response) => {
 };
 
 export const Login = async (req: Request, res: Response) => {
-  const { username, password, email } = req.body;
-  console.log(username, password);
+  const { username, password } = req.body;
+  console.log('Received login request:', { username, password });
 
   try {
     // Find the user by username
-    const check_user = await UserModel.findOne({ username: username});
-    console.log(check_user);
+    const check_user = await UserModel.findOne({ username: username });
+    console.log('User found in database:', check_user);
 
     // If user is not found, return an error
     if (!check_user) {
@@ -69,9 +70,9 @@ export const Login = async (req: Request, res: Response) => {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
-    const token = jwt.sign({id: check_user._id , role: check_user.role},'your_jwt_secret',{expiresIn:'24h'});
+    const token = jwt.sign({ id: check_user._id, role: check_user.role }, 'your_jwt_secret', { expiresIn: '24h' });
 
-    return res.status(201).json({token})
+    return res.status(200).json({ token }); // Changed to status 200 for successful login
   } catch (err) {
     console.error('Error during login:', err);
     return res.status(500).json({ message: 'Internal Server Error' });

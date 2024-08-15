@@ -4,7 +4,7 @@ import mongoconnect from './db.js';
 import authRoutes from './routes/userRoutes.js'; // Ensure the path is correct
 import courseRoutes from './routes/courseRoutes.js'
 import articleRoutes from './routes/articleRoutes.js'
-
+import bodyParser from 'body-parser';
 const PORT = 8000;
 
 // Connect to the database
@@ -15,6 +15,7 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use(bodyParser.json());
 
 // Routes
 app.use('/api/user', authRoutes);

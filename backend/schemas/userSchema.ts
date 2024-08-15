@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 export const studentSchema = z.object({
-  role: z.literal('student'),
+  role: z.literal( 'student'),
   collegeName: z.string().min(3).max(50),  // Adjusted max to accommodate longer names
   city: z.string().min(2).max(30),         // Adjusted min and max for more flexibility
   state: z.string().min(2).max(30),        // Adjusted min and max for more flexibility

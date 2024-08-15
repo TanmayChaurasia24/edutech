@@ -24,9 +24,9 @@ const signUp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     if (!result.success) {
         return res.status(400).json(result.error.errors);
     }
-    console.log(result);
+    // console.log(result);
     const newUser = result.data;
-    console.log("user: ", newUser);
+    // console.log("user: ", newUser);
     newUser.password = yield bcrypt_1.default.hash(newUser.password, 10);
     try {
         const existingUserByUsername = yield userModel_1.default.findOne({ username: newUser.username });
@@ -41,6 +41,7 @@ const signUp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         if (existingUserByEmail) {
             return res.status(400).json({ message: 'Email already exists' });
         }
+        console.log(newUser);
         const savedUser = yield userModel_1.default.create(newUser);
         return res.status(201).json({
             message: 'User created successfully',
@@ -54,12 +55,12 @@ const signUp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.signUp = signUp;
 const Login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { username, password, email } = req.body;
-    console.log(username, password);
+    const { username, password } = req.body;
+    console.log('Received login request:', { username, password });
     try {
         // Find the user by username
         const check_user = yield userModel_1.default.findOne({ username: username });
-        console.log(check_user);
+        console.log('User found in database:', check_user);
         // If user is not found, return an error
         if (!check_user) {
             return res.status(400).json({ message: 'No user with this username exists' });
@@ -71,7 +72,7 @@ const Login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             return res.status(400).json({ message: 'Invalid credentials' });
         }
         const token = jsonwebtoken_1.default.sign({ id: check_user._id, role: check_user.role }, 'your_jwt_secret', { expiresIn: '24h' });
-        return res.status(201).json({ token });
+        return res.status(200).json({ token }); // Changed to status 200 for successful login
     }
     catch (err) {
         console.error('Error during login:', err);
