@@ -8,3 +8,8 @@
     flex-direction: column;
     min-height: 100vh;
 } */
+
+.wrapper{
+    margin-top: 10vh;
+    min-height: 100%;
+}
