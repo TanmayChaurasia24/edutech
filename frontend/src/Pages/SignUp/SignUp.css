@@ -1,5 +1,7 @@
 .signup{
     min-height: 100vh;
+    margin-top: 10vh;
+    border: 1px solid transparent;
 }
 
 .signup-container{
@@ -7,7 +9,7 @@
     width: 70%;
     min-width: 420px;
     padding: 35px 50px;
-    margin: 80px auto;
+    margin: 50px auto;
     /* transform: translate(-50%,-25%); */
     /* position: absolute; */
     /* left: 50%; */
