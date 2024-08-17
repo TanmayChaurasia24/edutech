@@ -1,10 +1,9 @@
-import { Express,Router } from "express"; 
+import { Router } from "express"; 
 import {createArticle} from "../controllers/articleController"
-import { authenticate } from "../utils/userAuthenticate";
 
 const router = Router();
 
-router.post('/create',createArticle);
+router.post('/create/:courseId',createArticle);
 
 
 export default router;

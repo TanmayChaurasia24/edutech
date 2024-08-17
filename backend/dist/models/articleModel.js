@@ -24,11 +24,12 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
-// Create the Article schema
+// Schema for Article
 const ArticleSchema = new mongoose_1.Schema({
-    courseName: {
-        type: String,
-        required: true,
+    courseId: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: 'Course', // Reference to the Course model
+        required: false,
     },
     articleTitle: {
         type: String,
@@ -52,11 +53,10 @@ const ArticleSchema = new mongoose_1.Schema({
                 // Basic URL validation
                 return /^https?:\/\/.+\..+/.test(url);
             },
-            message: `is not a valid URL!`
+            message: 'is not a valid URL!',
         },
         required: false,
     },
 });
-// Create the Article model
 const ArticleModel = mongoose_1.default.model('Article', ArticleSchema);
 exports.default = ArticleModel;

@@ -8,9 +8,9 @@ interface Icourse extends Document {
         title: string;
         content: string;
         image?: Url;
-        video?: Url;
         thumbnail?: Url;
     }[];
+    video?: Url;
 }
 
 const courseSchema = new Schema<Icourse>({
@@ -51,10 +51,6 @@ const courseSchema = new Schema<Icourse>({
                     },
                     required: false,
                 },
-                video: {
-                    type: String, 
-                    required: false,
-                },
                 thumbnail: {
                     type: String, 
                     required: false,
@@ -63,6 +59,10 @@ const courseSchema = new Schema<Icourse>({
         ],
         required: true,
     },
+    video: {
+        type: String, 
+        required: false,
+    }
 });
 
 const Course = mongoose.model<Icourse>("Course", courseSchema);

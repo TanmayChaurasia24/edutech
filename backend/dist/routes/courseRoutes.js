@@ -5,4 +5,6 @@ const courseController_1 = require("../controllers/courseController");
 const router = (0, express_1.Router)();
 router.post('/create', courseController_1.createCourse);
 router.get('/all', courseController_1.fetchAllCourse);
+router.get('/:courseId/articles', courseController_1.fetchCourseArticles);
+router.post('/:courseId/:studentId/add', courseController_1.enrollStudentInCourse);
 exports.default = router;

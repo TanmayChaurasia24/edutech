@@ -62,10 +62,6 @@ const courseSchema = new mongoose_1.Schema({
                     },
                     required: false,
                 },
-                video: {
-                    type: String,
-                    required: false,
-                },
                 thumbnail: {
                     type: String,
                     required: false,
@@ -74,6 +70,10 @@ const courseSchema = new mongoose_1.Schema({
         ],
         required: true,
     },
+    video: {
+        type: String,
+        required: false,
+    }
 });
 const Course = mongoose_1.default.model("Course", courseSchema);
 exports.default = Course;

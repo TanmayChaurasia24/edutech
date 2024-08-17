@@ -85,9 +85,12 @@ export const fetchAllStudents = async(req: Request, res: Response) => {
   const num_students = await UserModel.countDocuments({role: 'student'});
   return res.status(200).json({ students, num_students });
 }
+
+
 export const fetchAllTeachers = async(req: Request, res: Response) => {
   // Fetch all teachers from the database
   const teacher = await UserModel.find({role: 'teacher'})
   const num_teacher = await UserModel.countDocuments({role: 'teacher'});
   return res.status(200).json({ teacher, num_teacher });
 }
+

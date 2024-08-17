@@ -61,7 +61,7 @@ const userSchema = new mongoose_1.Schema({
     role: {
         type: String,
         required: true,
-        enum: ['student', 'teacher'],
+        enum: ["student", "teacher"],
     },
     collegeName: {
         type: String,
@@ -87,6 +87,7 @@ const userSchema = new mongoose_1.Schema({
         minlength: 2,
         maxlength: 30, // Adjusted max length for broader range
     },
+    enrolledCourses: [{ type: mongoose_1.default.Schema.Types.ObjectId, ref: "Course" }],
     subject: {
         type: String,
         maxlength: 50,
@@ -97,5 +98,5 @@ const userSchema = new mongoose_1.Schema({
         max: 50,
     },
 });
-const UserModel = mongoose_1.default.model('User', userSchema);
+const UserModel = mongoose_1.default.model("User", userSchema);
 exports.default = UserModel;

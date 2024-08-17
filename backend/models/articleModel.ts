@@ -1,21 +1,22 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
-// Define the Article interface
+// Interface for Article
 export interface IArticle extends Document {
-    courseName: string;
+    courseId: mongoose.Types.ObjectId; // Reference to Course
     articleTitle: string;
     content: string;
     author: string;
     image?: string;
 }
 
-// Create the Article schema
+// Schema for Article
 const ArticleSchema: Schema = new Schema({
-    courseName: {
-        type: String,
-        required: true,
+    courseId: {
+        type: Schema.Types.ObjectId,
+        ref: 'Course', // Reference to the Course model
+        required: false,
     },
-    articleTitle: {
+    articleTitle: { 
         type: String,
         required: true,
         minlength: 10,
@@ -37,13 +38,12 @@ const ArticleSchema: Schema = new Schema({
                 // Basic URL validation
                 return /^https?:\/\/.+\..+/.test(url);
             },
-            message:`is not a valid URL!`
+            message: 'is not a valid URL!',
         },
         required: false,
     },
 });
 
-// Create the Article model
 const ArticleModel = mongoose.model<IArticle>('Article', ArticleSchema);
 
 export default ArticleModel;

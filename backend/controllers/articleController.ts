@@ -1,35 +1,39 @@
 import { Request, Response } from "express";
-import article from "../models/articleModel";
-import course from '../models/courseModel';
+import mongoose from "mongoose";
+import Article from "../models/articleModel";
+import Course from '../models/courseModel';
 import { articleSchema } from "../schemas/articleSchema";
 
 export const createArticle = async (req: Request, res: Response) => {
+    const { courseId } = req.params;  // Extract courseId from URL
     const detail = req.body;
-    console.log(detail);
 
+    // console.log("Request Body:", detail);
+
+    // Validate courseId as a MongoDB ObjectId
+    if (!mongoose.Types.ObjectId.isValid(courseId)) {
+        return res.status(400).json({ message: "Invalid course ID" });
+    }
     const result = articleSchema.safeParse(detail);
-
     if (!result.success) {
-        return res.status(400).json({ message: result.error.issues[0].message });
+        console.error("Validation Error:", result.error);
+        return res.status(400).json({ message: result.error.issues});
     }
 
-    console.log(result);
-
     const newArticle = result.data;
-    console.log('Article to create: ', newArticle);
+    newArticle.courseId = courseId;  
+    // console.log('Article to create: ', newArticle);
 
     try {
-        const courseExists = await course.findOne({ title: newArticle.courseName });
-
+        const courseExists = await Course.findById(courseId);
         if (!courseExists) {
             return res.status(400).json({ message: "Course does not exist" });
         }
 
-        const createdArticle = await article.create(newArticle);
-        console.log('Article created: ', createdArticle);
+        const createdArticle = await Article.create(newArticle);
 
-        await course.updateOne(
-            { title: newArticle.courseName },
+        await Course.updateOne(
+            { _id: courseId },
             {
                 $push: {
                     articles: {
@@ -41,7 +45,7 @@ export const createArticle = async (req: Request, res: Response) => {
             }
         );
 
-        res.status(201).json({ message: "Article created and added to course", article: createdArticle });
+        return res.status(201).json({ message: "Article created and added to course", article: createdArticle });
     } catch (error) {
         console.error('Error creating article: ', error);
         return res.status(500).json({ message: "Internal server error" });

@@ -13,27 +13,33 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createArticle = void 0;
+const mongoose_1 = __importDefault(require("mongoose"));
 const articleModel_1 = __importDefault(require("../models/articleModel"));
 const courseModel_1 = __importDefault(require("../models/courseModel"));
 const articleSchema_1 = require("../schemas/articleSchema");
 const createArticle = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { courseId } = req.params; // Extract courseId from URL
     const detail = req.body;
-    console.log(detail);
+    // console.log("Request Body:", detail);
+    // Validate courseId as a MongoDB ObjectId
+    if (!mongoose_1.default.Types.ObjectId.isValid(courseId)) {
+        return res.status(400).json({ message: "Invalid course ID" });
+    }
     const result = articleSchema_1.articleSchema.safeParse(detail);
     if (!result.success) {
-        return res.status(400).json({ message: result.error.issues[0].message });
+        console.error("Validation Error:", result.error);
+        return res.status(400).json({ message: result.error.issues });
     }
-    console.log(result);
     const newArticle = result.data;
-    console.log('Article to create: ', newArticle);
+    newArticle.courseId = courseId;
+    // console.log('Article to create: ', newArticle);
     try {
-        const courseExists = yield courseModel_1.default.findOne({ title: newArticle.courseName });
+        const courseExists = yield courseModel_1.default.findById(courseId);
         if (!courseExists) {
             return res.status(400).json({ message: "Course does not exist" });
         }
         const createdArticle = yield articleModel_1.default.create(newArticle);
-        console.log('Article created: ', createdArticle);
-        yield courseModel_1.default.updateOne({ title: newArticle.courseName }, {
+        yield courseModel_1.default.updateOne({ _id: courseId }, {
             $push: {
                 articles: {
                     title: newArticle.articleTitle,
@@ -42,7 +48,7 @@ const createArticle = (req, res) => __awaiter(void 0, void 0, void 0, function* 
                 }
             }
         });
-        res.status(201).json({ message: "Article created and added to course", article: createdArticle });
+        return res.status(201).json({ message: "Article created and added to course", article: createdArticle });
     }
     catch (error) {
         console.error('Error creating article: ', error);

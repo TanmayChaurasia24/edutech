@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document } from 'mongoose';
+import mongoose, { Schema, Document } from "mongoose";
 
 interface IUser extends Document {
   username: string;
@@ -6,11 +6,12 @@ interface IUser extends Document {
   phoneNumber: string;
   email: string;
   password: string;
-  role: 'student' | 'teacher';
+  role: "student" | "teacher";
   collegeName: string;
   city: string;
   state: string;
   country: string;
+  enrolledCourses:Array<mongoose.Schema.Types.ObjectId>
   subject?: string;
   teachingExperience?: number;
 }
@@ -27,7 +28,7 @@ const userSchema = new Schema<IUser>({
     type: String,
     required: true,
     minlength: 3,
-    maxlength: 50,  // Adjusted max length for longer names
+    maxlength: 50, // Adjusted max length for longer names
   },
   phoneNumber: {
     type: String,
@@ -52,42 +53,43 @@ const userSchema = new Schema<IUser>({
   role: {
     type: String,
     required: true,
-    enum: ['student', 'teacher'],
+    enum: ["student", "teacher"],
   },
   collegeName: {
     type: String,
     required: true,
     minlength: 3,
-    maxlength: 50,  // Adjusted max length for longer names
+    maxlength: 50, // Adjusted max length for longer names
   },
   city: {
     type: String,
     required: true,
-    minlength: 2,   // Adjusted min length for flexibility
-    maxlength: 30,  // Adjusted max length for flexibility
+    minlength: 2, // Adjusted min length for flexibility
+    maxlength: 30, // Adjusted max length for flexibility
   },
   state: {
     type: String,
     required: true,
-    minlength: 2,   // Adjusted min length for flexibility
-    maxlength: 30,  // Adjusted max length for flexibility
+    minlength: 2, // Adjusted min length for flexibility
+    maxlength: 30, // Adjusted max length for flexibility
   },
   country: {
     type: String,
     required: true,
     minlength: 2,
-    maxlength: 30,  // Adjusted max length for broader range
+    maxlength: 30, // Adjusted max length for broader range
   },
+  enrolledCourses: [{ type: mongoose.Schema.Types.ObjectId, ref: "Course" }],
   subject: {
     type: String,
     maxlength: 50,
   },
   teachingExperience: {
     type: Number,
-    min: 0,         // Added min value to ensure non-negative experience
+    min: 0, // Added min value to ensure non-negative experience
     max: 50,
   },
 });
 
-const UserModel = mongoose.model<IUser>('User', userSchema);
+const UserModel = mongoose.model<IUser>("User", userSchema);
 export default UserModel;
