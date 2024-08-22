@@ -66,6 +66,7 @@ const SignUp = () => {
           setError("");
           setShowAlert(false);
           window.location.replace("/");
+          localStorage.setItem("token", response.data.token);
         }
       } catch (error) {
         // Extract the message if error is an object

@@ -82,6 +82,7 @@ export const enrolledcourses = async (req: Request, res: Response) => {
 
 export const enrollStudentInCourse = async (req: Request, res: Response) => {
     const { studentId, courseId } = req.params;
+    const courseid = new mongoose.Types.ObjectId(courseId);
 
     if (!mongoose.Types.ObjectId.isValid(studentId) || !mongoose.Types.ObjectId.isValid(courseId)) {
         return res.status(400).json({ message: 'Invalid student ID or course ID' });
@@ -102,11 +103,11 @@ export const enrollStudentInCourse = async (req: Request, res: Response) => {
             return res.status(400).json({ message: 'User is not a student' });
         }
 
-        if (studentfind.enrolledCourses.includes(courseId)) {
+        if (studentfind.enrolledCourses.includes(courseid)) {
             return res.status(400).json({ message: 'Student already enrolled in this course' });
         }
 
-        studentfind.enrolledCourses.push(courseId);
+        studentfind.enrolledCourses.push(courseid);
         await studentfind.save(); // Save the updated student document
 
         return res.status(200).json({ message: 'Successfully enrolled in the course', student: studentfind });
