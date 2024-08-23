@@ -87,7 +87,6 @@ const enrolledcourses = (req, res) => __awaiter(void 0, void 0, void 0, function
 exports.enrolledcourses = enrolledcourses;
 const enrollStudentInCourse = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { studentId, courseId } = req.params;
-    const courseid = new mongoose_1.default.Types.ObjectId(courseId);
     if (!mongoose_1.default.Types.ObjectId.isValid(studentId) || !mongoose_1.default.Types.ObjectId.isValid(courseId)) {
         return res.status(400).json({ message: 'Invalid student ID or course ID' });
     }
@@ -103,10 +102,10 @@ const enrollStudentInCourse = (req, res) => __awaiter(void 0, void 0, void 0, fu
         if (studentfind.role !== 'student') {
             return res.status(400).json({ message: 'User is not a student' });
         }
-        if (studentfind.enrolledCourses.includes(courseid)) {
+        if (studentfind.enrolledCourses.includes(courseId)) {
             return res.status(400).json({ message: 'Student already enrolled in this course' });
         }
-        studentfind.enrolledCourses.push(courseid);
+        studentfind.enrolledCourses.push(courseId);
         yield studentfind.save(); // Save the updated student document
         return res.status(200).json({ message: 'Successfully enrolled in the course', student: studentfind });
     }
