@@ -37,6 +37,7 @@ const Login = () => {
           setError("");  // Clear any previous errors
           setShowAlert(false);
           window.location.replace("/");  // Optionally redirect or handle success
+          localStorage.setItem("token", response.data.token);
         }
       } catch (error) {
         // Extract the message if error is an object
@@ -46,6 +47,7 @@ const Login = () => {
         console.log("Error: ", errorMessage);
         setError(errorMessage);
         setShowAlert(true);
+        
       }
     }
 
