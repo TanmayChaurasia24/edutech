@@ -11,25 +11,25 @@ const courseRoutes_js_1 = __importDefault(require("./routes/courseRoutes.js"));
 const articleRoutes_js_1 = __importDefault(require("./routes/articleRoutes.js"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const messageRoutes_js_1 = __importDefault(require("./routes/messageRoutes.js"));
+const socket_js_1 = require("./socket/socket.js");
 const PORT = 8000;
 // Connect to the database
 (0, db_js_1.default)();
-const app = (0, express_1.default)();
 // Middleware
-app.use((0, cors_1.default)());
-app.use(express_1.default.json());
-app.use(body_parser_1.default.json());
+socket_js_1.app.use((0, cors_1.default)());
+socket_js_1.app.use(express_1.default.json());
+socket_js_1.app.use(body_parser_1.default.json());
 // Routes
-app.use('/api/user', userRoutes_js_1.default);
-app.use('/api/course', courseRoutes_js_1.default);
-app.use('/api/article', articleRoutes_js_1.default);
-app.use('/api/message', messageRoutes_js_1.default);
+socket_js_1.app.use('/api/user', userRoutes_js_1.default);
+socket_js_1.app.use('/api/course', courseRoutes_js_1.default);
+socket_js_1.app.use('/api/article', articleRoutes_js_1.default);
+socket_js_1.app.use('/api/message', messageRoutes_js_1.default);
 // Error handling middleware
-app.use((err, req, res, next) => {
+socket_js_1.app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).send('Something went wrong!');
 });
 // Start server
-app.listen(PORT, () => {
+socket_js_1.server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
