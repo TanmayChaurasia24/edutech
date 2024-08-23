@@ -54,6 +54,11 @@ const sendMessage = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         if (newMessage) {
             conversation.messages.push(newMessage._id);
         }
+        yield Promise.all([conversation.save(), newMessage.save()]);
+        return res.status(201).json({
+            message: "Message sent successfully",
+            MSG: newMessage.message,
+        });
     }
     catch (e) {
         return res.status(500).json({
