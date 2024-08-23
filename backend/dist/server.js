@@ -10,6 +10,7 @@ const userRoutes_js_1 = __importDefault(require("./routes/userRoutes.js")); // E
 const courseRoutes_js_1 = __importDefault(require("./routes/courseRoutes.js"));
 const articleRoutes_js_1 = __importDefault(require("./routes/articleRoutes.js"));
 const body_parser_1 = __importDefault(require("body-parser"));
+const messageRoutes_js_1 = __importDefault(require("./routes/messageRoutes.js"));
 const PORT = 8000;
 // Connect to the database
 (0, db_js_1.default)();
@@ -22,6 +23,7 @@ app.use(body_parser_1.default.json());
 app.use('/api/user', userRoutes_js_1.default);
 app.use('/api/course', courseRoutes_js_1.default);
 app.use('/api/article', articleRoutes_js_1.default);
+app.use('/api/message', messageRoutes_js_1.default);
 // Error handling middleware
 app.use((err, req, res, next) => {
     console.error(err.stack);
