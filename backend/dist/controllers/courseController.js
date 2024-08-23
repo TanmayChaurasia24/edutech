@@ -18,23 +18,22 @@ const courseSchema_1 = require("../schemas/courseSchema");
 const userModel_1 = __importDefault(require("../models/userModel"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const createCourse = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const detail = req.body;
     const result = courseSchema_1.courseSchema.safeParse(req.body);
     if (!result.success) {
         return res.status(400).json({ message: result.error.issues[0].message });
     }
     const newCourse = result.data;
-    console.log('course to create: ', newCourse);
     try {
         const existingCourse = yield courseModel_1.default.findOne({ name: newCourse.name });
         if (existingCourse) {
-            return res.status(400).json({ message: "course with this title already exists" });
+            return res.status(400).json({ message: "Course with this title already exists" });
         }
         const new_course = yield courseModel_1.default.create(newCourse);
-        return res.status(201).json({ message: "new course created", new_course });
+        return res.status(201).json({ message: "New course created", new_course });
     }
     catch (error) {
-        return res.status(400).json({ message: "internal server error" });
+        console.error('Error creating course:', error);
+        return res.status(500).json({ message: "Internal server error" });
     }
 });
 exports.createCourse = createCourse;

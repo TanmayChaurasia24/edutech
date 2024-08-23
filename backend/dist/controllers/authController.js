@@ -43,9 +43,11 @@ const signUp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
         console.log(newUser);
         const savedUser = yield userModel_1.default.create(newUser);
+        const token = jsonwebtoken_1.default.sign({ id: savedUser._id }, 'your_jwt_secret');
         return res.status(201).json({
             message: 'User created successfully',
-            user: savedUser
+            user: savedUser,
+            token: token
         });
     }
     catch (err) {
@@ -71,7 +73,10 @@ const Login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         if (!isPasswordCorrect) {
             return res.status(400).json({ message: 'Invalid credentials' });
         }
-        const token = jsonwebtoken_1.default.sign({ id: check_user._id, role: check_user.role }, 'your_jwt_secret', { expiresIn: '24h' });
+        if (!process.env.JWT_SECRET) {
+            return res.status(500).json({ message: 'Internal Server Error' });
+        }
+        const token = jsonwebtoken_1.default.sign({ _id: check_user._id }, process.env.JWT_SECRET, { expiresIn: '24h' });
         return res.status(200).json({ token }); // Changed to status 200 for successful login
     }
     catch (err) {

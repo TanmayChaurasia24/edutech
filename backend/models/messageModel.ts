@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { Document } from "mongoose";
+import { Document,Schema } from "mongoose";
 
 interface MessageType extends Document {
     senderId:mongoose.Schema.Types.ObjectId,
@@ -7,7 +7,7 @@ interface MessageType extends Document {
     message:String,
 }
 
-const messageSchema = new mongoose.Schema <MessageType>({
+const messageSchema = new Schema <MessageType>({
     senderId:{
         type:mongoose.Schema.Types.ObjectId,
         required:true,
