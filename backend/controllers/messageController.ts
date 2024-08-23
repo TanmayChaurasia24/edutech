@@ -43,6 +43,11 @@ export const sendMessage = async (req: Request, res: Response) => {
     if(newMessage){
         conversation.messages.push(newMessage._id as mongoose.Schema.Types.ObjectId);
     }
+    await Promise.all([conversation.save(),newMessage.save()])
+    return res.status(201).json({
+        message: "Message sent successfully",
+        MSG: newMessage.message,
+    });
   } catch (e) {
     return res.status(500).json({
       message: "Internal server error",

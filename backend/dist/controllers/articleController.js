@@ -19,18 +19,17 @@ const courseModel_1 = __importDefault(require("../models/courseModel"));
 const articleSchema_1 = require("../schemas/articleSchema");
 const createArticle = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { courseId } = req.params; // Extract courseId from URL
-    const detail = req.body;
     // console.log("Request Body:", detail);
     // Validate courseId as a MongoDB ObjectId
     if (!mongoose_1.default.Types.ObjectId.isValid(courseId)) {
         return res.status(400).json({ message: "Invalid course ID" });
     }
-    const result = articleSchema_1.articleSchema.safeParse(detail);
+    const result = articleSchema_1.articleSchema.safeParse(req.body);
     if (!result.success) {
         console.error("Validation Error:", result.error);
         return res.status(400).json({ message: result.error.issues });
     }
-    const newArticle = result.data;
+    let newArticle = result.data;
     newArticle.courseId = courseId;
     // console.log('Article to create: ', newArticle);
     try {
@@ -44,6 +43,7 @@ const createArticle = (req, res) => __awaiter(void 0, void 0, void 0, function* 
                 articles: {
                     title: newArticle.articleTitle,
                     content: newArticle.content,
+                    author: newArticle.author,
                     image: newArticle.image,
                 }
             }
