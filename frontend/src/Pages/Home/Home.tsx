@@ -4,6 +4,9 @@ import { GlobeDemo } from "./Globe";
 import { HeaderNav, NavbarDemo } from "./NavbarDemo";
 import { ModeToggle } from "@/components/mode-toggle";
 import { LayoutGridDemo } from "./Layout";
+import { TextGenerateEffectDemo } from "./TextArea";
+import { Sheet } from "@/components/ui/sheet";
+import Chat from "./Chat";
 // import App from "../../App"
 
 const Home = () => {
@@ -24,6 +27,8 @@ const Home = () => {
         </h2>
       </BackgroundBeamsWithCollision>
       {/* <GlobeDemo/> */}
+      <TextGenerateEffectDemo/>
+      <Chat/>
       <LayoutGridDemo/>
     </div>
   );
