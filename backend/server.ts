@@ -6,7 +6,7 @@ import courseRoutes from './routes/courseRoutes.js'
 import articleRoutes from './routes/articleRoutes.js'
 import bodyParser from 'body-parser';
 import messageRoutes from './routes/messageRoutes.js';
-import {app,server} from './socket/socket.js';
+import {app,server} from "./socket/socket.js"
 const PORT = 8000;
 
 // Connect to the database

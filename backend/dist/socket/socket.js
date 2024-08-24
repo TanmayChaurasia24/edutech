@@ -9,11 +9,11 @@ const http_1 = __importDefault(require("http"));
 const express_1 = __importDefault(require("express"));
 const app = (0, express_1.default)();
 exports.app = app;
-const server = http_1.default.createServer((0, express_1.default)());
+const server = http_1.default.createServer(app);
 exports.server = server;
 const io = new socket_io_1.Server(server, {
     cors: {
-        origin: "http://localhost:3000",
+        origin: "http://localhost:5173",
         methods: ["GET", "POST"],
     },
 });
