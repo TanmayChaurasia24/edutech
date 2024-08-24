@@ -6,12 +6,12 @@ import courseRoutes from './routes/courseRoutes.js'
 import articleRoutes from './routes/articleRoutes.js'
 import bodyParser from 'body-parser';
 import messageRoutes from './routes/messageRoutes.js';
+import {app,server} from './socket/socket.js';
 const PORT = 8000;
 
 // Connect to the database
 mongoconnect();
 
-const app = express();
 
 // Middleware
 app.use(cors());
@@ -31,6 +31,6 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 });
 
 // Start server
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
