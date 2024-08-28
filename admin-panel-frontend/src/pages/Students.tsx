@@ -1,5 +1,5 @@
-import React from 'react'
-import AdminSidebar from '../components/AdminSidebar'
+import React from "react";
+import AdminSidebar from "../components/AdminSidebar";
 
 const Students = () => {
   return (
@@ -14,7 +14,7 @@ const Students = () => {
         </main>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default Students
+export default Students;

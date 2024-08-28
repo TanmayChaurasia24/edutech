@@ -1,7 +1,6 @@
 @import "mixins";
 @import "dashboard";
 
-
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -62,8 +61,8 @@ a {
           padding: 0.5rem 1rem;
           border-radius: 10px;
           a {
-            color: rgba(0,0,0,0.825);
-            @include flex(row,unset)
+            color: rgba(0, 0, 0, 0.825);
+            @include flex(row, unset);
           }
         }
       }

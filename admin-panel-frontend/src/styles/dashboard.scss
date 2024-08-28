@@ -1,53 +1,53 @@
 .dashboard {
-    overflow-y: auto;
+  overflow-y: auto;
 
-    .bar {
-        height: 4rem;
-        @include flex(row,unset);
-        padding: 0 1rem;
-        border-bottom: 1px solid rgba(0,0,0,0.37);
-        > input {
-            margin-right: auto;
-            @include inputStyle(60%,1rem,0)
-        }
-
-        > img {
-            @include square(2rem)
-        }
+  .bar {
+    height: 4rem;
+    @include flex(row, unset);
+    padding: 0 1rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.37);
+    > input {
+      margin-right: auto;
+      @include inputStyle(60%, 1rem, 0);
     }
 
-    .widgetcontainer {
-        @include flex(row,space-between,stretch,2rem);
-        padding: 2rem 2rem 2rem 0;
+    > img {
+      @include square(2rem);
+    }
+  }
 
-        .widget {
-            min-width: 10rem;
-            background-color: white;
-            box-shadow: 0 0 10px rgba(0,0,0,0.132);
-            padding: 2rem;
-            border-radius: 10px;
-            @include flex(row,space-between,stretch,0);
-        }
+  .widgetcontainer {
+    @include flex(row, space-between, stretch, 2rem);
+    padding: 2rem 2rem 2rem 0;
+
+    .widget {
+      min-width: 10rem;
+      background-color: white;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.132);
+      padding: 2rem;
+      border-radius: 10px;
+      @include flex(row, space-between, stretch, 0);
+    }
+  }
+
+  .graphcontainer {
+    @include flex(row, unset, unset, 2rem);
+    padding: 0 2rem 2rem 0;
+
+    > div {
+      background-color: white;
+      border-radius: 10px;
     }
 
-    .graphcontainer {
-        @include flex(row,unset,unset,2rem);
-        padding: 0 2rem 2rem 0;
+    .revenuechart {
+      width: 100%;
+      padding: 1rem 3rem;
 
-        > div {
-            background-color: white;
-            border-radius: 10px;
-        }
-
-        .revenuechart {
-            width: 100%;
-            padding: 1rem 3rem; 
-
-            > h2 {
-                @include heading;
-                margin: 1rem 0 2rem 0.25rem;
-                text-align: center;
-            }
-        }
+      > h2 {
+        @include heading;
+        margin: 1rem 0 2rem 0.25rem;
+        text-align: center;
+      }
     }
+  }
 }

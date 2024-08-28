@@ -1,5 +1,5 @@
-import React from 'react'
-import AdminSidebar from '../components/AdminSidebar'
+import React from "react";
+import AdminSidebar from "../components/AdminSidebar";
 
 const Transactions = () => {
   return (
@@ -14,7 +14,7 @@ const Transactions = () => {
         </main>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default Transactions
+export default Transactions;

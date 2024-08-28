@@ -12,8 +12,14 @@ import {
   ChartOptions,
 } from "chart.js";
 
-// Register the necessary components
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 interface BarChartProps {
   data: ChartData<"bar", number[], string>;
