@@ -1,10 +1,66 @@
+import React from "react";
 import { FaRegBell } from "react-icons/fa";
 import AdminSidebar from "../components/AdminSidebar";
 import { BsSearch } from "react-icons/bs";
 import userimage from "../assets/images.png";
 import { HiTrendingDown, HiTrendingUp } from "react-icons/hi";
+import BarChart from "../components/charts/Barcharts";
+import {
+  ChartOptions,
+} from "chart.js";
 
 const Dashboard = () => {
+  const chartData = {
+    labels: ['2019', '2020', '2021', '2022', '2023'], 
+    datasets: [
+      {
+        label: 'Revenue',
+        data: [5000, 6000, 7000, 8000, 9000], // Revenue data for the last 5 years
+        backgroundColor: 'rgba(75, 192, 192, 0.2)', // Background color for bars
+        borderColor: 'rgba(75, 192, 192, 1)', // Border color for bars
+        borderWidth: 1, // Border width for bars
+      },
+      {
+        label: 'Number of Students',
+        data: [2003, 2250, 3020, 3504, 1400], // Number of students data for the last 5 years
+        backgroundColor: 'rgba(153, 102, 255, 0.2)', // Background color for bars
+        borderColor: 'rgba(153, 102, 255, 1)', // Border color for bars
+        borderWidth: 1, // Border width for bars
+      },
+      {
+        label: 'Number of Teachers',
+        data: [5650, 6530, 7022, 8220, 940], // Number of teachers data for the last 5 years
+        backgroundColor: 'rgba(255, 159, 64, 0.2)', // Background color for bars
+        borderColor: 'rgba(255, 159, 64, 1)', // Border color for bars
+        borderWidth: 1, // Border width for bars
+      },
+    ],
+  };
+
+  const chartOptions: ChartOptions<"bar">  = {
+    responsive: true,
+    maintainAspectRatio:true,
+    plugins: {
+      legend: {
+        position: 'top',
+      },
+      tooltip:{
+        enabled:true,
+        mode: 'nearest', 
+        intersect: false,
+      },
+      title: {
+        display: false,
+        text: 'Overview of Revenue, Students, and Teachers',
+      },
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+      },
+    },
+  };
+
   return (
     <>
       <div className="admincontainer">
@@ -53,8 +109,8 @@ const Dashboard = () => {
           
           <section className="graphcontainer">
             <div className="revenuechart">
-              <h2>Revenue, Students and Teachers</h2>
-              
+              <h2>Revenue, Students, and Teachers</h2>
+              <BarChart data={chartData} options={chartOptions} />
             </div>
           </section>
 
