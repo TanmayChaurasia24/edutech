@@ -1,7 +1,13 @@
 import { IconType } from "react-icons";
 import { Link, useLocation, Location } from "react-router-dom";
-import { RiDashboardFill,RiCoupon3Fill } from "react-icons/ri";
-import { FaChartBar,FaChartPie,FaChartLine,FaStopwatch,FaGamepad } from "react-icons/fa";
+import { RiDashboardFill, RiCoupon3Fill } from "react-icons/ri";
+import {
+  FaChartBar,
+  FaChartPie,
+  FaChartLine,
+  FaStopwatch,
+  FaGamepad,
+} from "react-icons/fa";
 
 const AdminSidebar = () => {
   const location = useLocation();

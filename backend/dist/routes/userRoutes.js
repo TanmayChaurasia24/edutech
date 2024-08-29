@@ -9,6 +9,6 @@ const userAuthenticate_1 = require("../utils/userAuthenticate");
 const router = express_1.default.Router();
 router.post('/signup', authController_1.signUp);
 router.post('/login', authController_1.Login);
-router.get('/allstudents', userAuthenticate_1.authenticate, authController_1.fetchAllStudents);
+router.get('/allstudents', authController_1.fetchAllStudents);
 router.get('/allteachers', userAuthenticate_1.authenticate, authController_1.fetchAllTeachers);
 exports.default = router;

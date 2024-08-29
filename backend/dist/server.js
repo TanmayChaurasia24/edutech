@@ -16,7 +16,21 @@ const PORT = 8000;
 // Connect to the database
 (0, db_js_1.default)();
 // Middleware
-socket_js_1.app.use((0, cors_1.default)());
+const allowedOrigins = [
+    'http://localhost:3000', // User-facing frontend
+    'http://localhost:5173', // Admin panel frontend
+];
+socket_js_1.app.use((0, cors_1.default)({
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+            callback(null, true);
+        }
+        else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true,
+}));
 socket_js_1.app.use(express_1.default.json());
 socket_js_1.app.use(body_parser_1.default.json());
 // Routes
