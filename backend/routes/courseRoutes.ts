@@ -5,7 +5,7 @@ import { authenticate } from "../utils/userAuthenticate";
 const router = Router();
 
 router.post('/create',authenticate,createCourse);
-router.get('/all',authenticate,fetchAllCourse);
+router.get('/all',fetchAllCourse);
 router.get('/:courseId/articles',authenticate, fetchCourseArticles);
 router.post('/:courseId/:studentId/add',authenticate,enrollStudentInCourse);
 

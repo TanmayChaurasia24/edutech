@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FaRegBell } from "react-icons/fa";
 import AdminSidebar from "../components/AdminSidebar";
 import { BsSearch } from "react-icons/bs";
@@ -6,8 +6,94 @@ import userimage from "../assets/images.png";
 import { HiTrendingDown, HiTrendingUp } from "react-icons/hi";
 import BarChart from "../components/charts/Barcharts";
 import { ChartOptions } from "chart.js";
+import axios from "axios";
+
+interface User {
+  username: string;
+  name: string;
+  phoneNumber: string;
+  email: string;
+  role: "student" | "teacher";
+  collegeName: string;
+  city: string;
+  state: string;
+  country: string;
+  enrolledCourses: Array<string>;
+  subject?: string;
+  teachingExperience?: number;
+}
+
+interface Article {
+  title: string;
+  content: string;
+  image?: URL;
+  thumbnail?: URL;
+}
+
+interface Course {
+  name: string;
+  description: string;
+  articles?: Article[];
+  video?: URL;
+}
+
+interface apiResponseCourse {
+  fetchall: Course[];
+  numberOfCourses: number;
+}
+
+interface apiresponseStudent {
+  students: User[];
+  num_students: number;
+}
+
+interface apiresponseTeacher {
+  teacher: User[];
+  num_teacher: number;
+}
 
 const Dashboard = () => {
+  const [num_s, sets] = useState(0);
+  const [num_t, sett] = useState(0);
+  const [num_c, setc] = useState(0);
+
+  const [studentchange, setstudentchange] = useState(0);
+  const [teacherchange, setteacherchange] = useState(0);
+  const [coursechange, setcoursechange] = useState(0);
+
+  const prev_s:number = num_s;
+  const prev_c:number = num_c;
+  const prev_t:number = num_t;
+
+  useEffect(() => {
+    const fetchDetails = async () => {
+      const num_students = await axios.get<apiresponseStudent>(
+        "http://localhost:8000/api/user/allstudents"
+      );
+      const num_teachers = await axios.get<apiresponseTeacher>(
+        "http://localhost:8000/api/user/allteachers"
+      );
+      const num_courses = await axios.get<apiResponseCourse>(
+        "http://localhost:8000/api/course/all"
+      );
+
+      sets(num_students.data.num_students);
+      sett(num_teachers.data.num_teacher);
+      setc(num_courses.data.numberOfCourses);
+
+      const per_change = (curr: number, prev: number):number => {
+        if(prev === 0) return 100
+        return ((curr - prev) / prev) * 100;
+      };
+
+      setstudentchange(per_change(num_students.data.num_students, prev_s));
+      setteacherchange(per_change(num_teachers.data.num_teacher, prev_t));
+      setcoursechange(per_change(num_courses.data.numberOfCourses, prev_c));
+    };
+
+    fetchDetails();
+  }, []);
+
   const chartData = {
     labels: ["2019", "2020", "2021", "2022", "2023"],
     datasets: [
@@ -81,20 +167,20 @@ const Dashboard = () => {
             />
             <WidgetItem
               heading="Students"
-              percent={10}
-              value={3500}
+              percent={studentchange}
+              value={num_s}
               color="rgb(0,115,255)"
             />
             <WidgetItem
               heading="Teacher"
-              percent={14}
-              value={350}
+              percent={teacherchange}
+              value={num_t}
               color="rgb(0,115,255)"
             />
             <WidgetItem
               heading="Courses"
-              percent={10}
-              value={30}
+              percent={coursechange}
+              value={num_c}
               color="rgb(0,115,255)"
             />
             <WidgetItem
@@ -135,7 +221,7 @@ const WidgetItem = ({
   <article className="widget" style={{ borderColor: color }}>
     <div className="widgetinfo">
       <p>{heading}</p>
-      <h4>{amount ? `$${value.toLocaleString()}` : value.toLocaleString()}</h4>
+      <h4>{amount ? `$${value}` : value}</h4>
       {percent > 0 ? (
         <span className="green">
           <HiTrendingUp /> +{percent}%

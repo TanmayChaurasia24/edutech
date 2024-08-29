@@ -7,6 +7,6 @@ const router = express.Router();
 router.post('/signup', signUp);
 router.post('/login', Login);
 router.get('/allstudents',fetchAllStudents);
-router.get('/allteachers', authenticate,fetchAllTeachers);
+router.get('/allteachers',fetchAllTeachers);
 
 export default router;
