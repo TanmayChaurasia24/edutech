@@ -1,0 +1,31 @@
+.student-area {
+  width: 100%;
+  padding: 20px;
+  overflow-y: auto;
+
+  .heading {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .student-list {
+    .single-student {
+      padding: 16px;
+      background-color: #fff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      margin-top: 20px;
+
+      .single-btn {
+       padding: 4px;
+       border: 2px solid black;
+       margin: 10px;
+       width: 60px;
+       border-radius: 10px;
+       cursor: pointer;
+      }
+    }
+  }
+}
