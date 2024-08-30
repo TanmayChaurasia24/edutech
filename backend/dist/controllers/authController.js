@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.fetchAllTeachers = exports.fetchAllStudents = exports.Login = exports.signUp = void 0;
+exports.deleteStudent = exports.fetchAllTeachers = exports.fetchAllStudents = exports.Login = exports.signUp = void 0;
 const userSchema_1 = require("../schemas/userSchema");
 const userModel_1 = __importDefault(require("../models/userModel"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
@@ -99,3 +99,19 @@ const fetchAllTeachers = (req, res) => __awaiter(void 0, void 0, void 0, functio
     return res.status(200).json({ teacher, num_teacher });
 });
 exports.fetchAllTeachers = fetchAllTeachers;
+const deleteStudent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { username } = req.query;
+    try {
+        const user = yield userModel_1.default.findOne({ username, role: 'student' });
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        yield user.deleteOne();
+        return res.status(200).json({ message: 'User deleted successfully' });
+    }
+    catch (error) {
+        console.error('Error deleting user:', error);
+        return res.status(500).json({ message: 'An error occurred while deleting the user' });
+    }
+});
+exports.deleteStudent = deleteStudent;

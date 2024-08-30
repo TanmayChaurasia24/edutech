@@ -99,3 +99,19 @@ export const fetchAllTeachers = async(req: Request, res: Response) => {
   return res.status(200).json({ teacher, num_teacher });
 }
 
+export const deleteStudent = async(req: Request, res: Response) => {
+  const { username } = req.query;
+  try {
+    const user = await UserModel.findOne({ username, role: 'student' });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    await user.deleteOne();
+    return res.status(200).json({ message: 'User deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting user:', error);
+    return res.status(500).json({ message: 'An error occurred while deleting the user' });
+}
+
+
+
