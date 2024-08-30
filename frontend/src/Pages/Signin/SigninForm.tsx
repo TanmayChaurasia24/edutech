@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Label } from "../../components/ui/label";
 import { Input } from "../../components/ui/input";
 import { cn } from "../../lib/utils";
+import { useNavigate } from "react-router-dom";
 import {
   IconBrandGithub,
   IconBrandGoogle,
@@ -14,6 +15,7 @@ export function SigninFormDemo() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate=useNavigate();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -30,7 +32,7 @@ export function SigninFormDemo() {
       localStorage.setItem("token", data.token);
       console.log("Form submitted", username, password);
       alert("Login successful");
-      <Navigate to="/"/>
+      navigate("/");
     } catch (error) {
       console.error("Login failed", error);
     } finally {

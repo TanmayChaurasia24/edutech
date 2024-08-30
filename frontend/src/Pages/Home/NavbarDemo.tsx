@@ -112,7 +112,7 @@ export function HeaderNav() {
         <NavbarDemo />
         <div className="flex flex-row items-center gap-[10px] justify-center mt-5 mr-10">
           <div className="cursor-pointer">
-            <a href="/signup" className="relative inline-block p-[3px]">
+            <a href="/signin" className="relative inline-block p-[3px]">
               <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-lg pointer-events-none" />
               <div className="relative px-6 py-2 bg-black rounded-[6px] text-white transition duration-200 group-hover:bg-transparent group-hover:text-black">
                 Signin
