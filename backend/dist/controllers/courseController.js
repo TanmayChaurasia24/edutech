@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.enrollStudentInCourse = exports.enrolledcourses = exports.fetchCourseArticles = exports.fetchAllCourse = exports.createCourse = void 0;
+exports.deleteCourse = exports.enrollStudentInCourse = exports.enrolledcourses = exports.fetchCourseArticles = exports.fetchAllCourse = exports.createCourse = void 0;
 const courseModel_1 = __importDefault(require("../models/courseModel"));
 const courseSchema_1 = require("../schemas/courseSchema");
 const userModel_1 = __importDefault(require("../models/userModel"));
@@ -114,3 +114,19 @@ const enrollStudentInCourse = (req, res) => __awaiter(void 0, void 0, void 0, fu
     }
 });
 exports.enrollStudentInCourse = enrollStudentInCourse;
+const deleteCourse = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { name } = req.body;
+    try {
+        const coursefind = yield courseModel_1.default.findOne({ name });
+        if (!coursefind) {
+            return res.status(404).json({ message: "Course not found" });
+        }
+        yield courseModel_1.default.deleteOne({ name });
+        return res.status(200).json({ message: "Course deleted successfully" });
+    }
+    catch (error) {
+        console.error("Error deleting course:", error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+});
+exports.deleteCourse = deleteCourse;

@@ -8,4 +8,5 @@ router.post('/create', userAuthenticate_1.authenticate, courseController_1.creat
 router.get('/all', courseController_1.fetchAllCourse);
 router.get('/:courseId/articles', userAuthenticate_1.authenticate, courseController_1.fetchCourseArticles);
 router.post('/:courseId/:studentId/add', userAuthenticate_1.authenticate, courseController_1.enrollStudentInCourse);
+router.post('/courseDelete', courseController_1.deleteCourse);
 exports.default = router;
