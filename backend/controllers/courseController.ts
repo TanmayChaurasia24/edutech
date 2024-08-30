@@ -80,7 +80,7 @@ export const enrolledcourses = async (req: Request, res: Response) => {
 
 export const enrollStudentInCourse = async (req: Request, res: Response) => {
     const { studentId, courseId } = req.params;
-
+    
     if (!mongoose.Types.ObjectId.isValid(studentId) || !mongoose.Types.ObjectId.isValid(courseId)) {
         return res.status(400).json({ message: 'Invalid student ID or course ID' });
     }
@@ -111,5 +111,20 @@ export const enrollStudentInCourse = async (req: Request, res: Response) => {
     } catch (error) {
         console.error("Error enrolling student in course:", error);
         return res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
+export const deleteCourse = async (req: Request, res: Response) => {
+    const { name } = req.body;
+    try {
+        const coursefind = await Course.findOne({ name });
+        if (!coursefind) {
+            return res.status(404).json({ message: "Course not found" });
+        }
+        await Course.deleteOne({ name });
+        return res.status(200).json({ message: "Course deleted successfully" });
+    } catch (error) {
+        console.error("Error deleting course:", error);
+        return res.status(500).json({ message: "Internal server error" });
     }
 };

@@ -18,6 +18,10 @@ interface User {
   teachingExperience?: number;
 }
 
+interface SendingData {
+  username: string;
+}
+
 interface ApiResponse {
   students: User[];
   num_students: number;
@@ -45,21 +49,28 @@ const Students: React.FC = () => {
   if (error) return <div>Error: {error}</div>;
 
   const handleStudentDelete = async (username: string) => {
+    const data: SendingData = { username };
+  
     try {
-      await axios.post("http://localhost:8000/api/user/deletestudent", {
-        username,
-      }, {
+
+      await axios.request({
+        url: "http://localhost:8000/api/user/deleteStudent",
+        method: 'DELETE',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        params: { _method: 'DELETE' } // Use _method to simulate DELETE
+        data,
       });
-      // Remove the deleted student from the users array
-      setUsers((prevUsers) => prevUsers.filter((user) => user.username !== username));
+      console.log("request send");
+      
+      setUsers((prevUsers) => prevUsers.filter(user => user.username !== username));
+  
     } catch (error) {
       setError((error as Error).message);
     }
   };
+  
+  
   
 
   return (
