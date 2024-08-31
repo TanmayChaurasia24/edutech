@@ -1,6 +1,6 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import App from './App.tsx'; // App acts as the layout
+import App from './App.js';
 import './index.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Signup from './Pages/Signup/Signup.tsx';

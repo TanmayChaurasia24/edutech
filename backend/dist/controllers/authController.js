@@ -129,7 +129,7 @@ const deleteStudent = (req, res) => __awaiter(void 0, void 0, void 0, function* 
 exports.deleteStudent = deleteStudent;
 const deleteTeacher = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("Request received:", req.body);
-    const { username } = req.query;
+    const { username } = req.body;
     try {
         const user = yield userModel_1.default.findOne({ username, role: "teacher" });
         if (!user) {

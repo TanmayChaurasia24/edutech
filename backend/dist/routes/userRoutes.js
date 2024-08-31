@@ -11,5 +11,5 @@ router.post('/login', authController_1.Login);
 router.get('/allstudents', authController_1.fetchAllStudents);
 router.get('/allteachers', authController_1.fetchAllTeachers);
 router.delete('/deleteStudent', authController_1.deleteStudent);
-router.post('/deleteTeacher', authController_1.deleteTeacher);
+router.delete('/deleteTeacher', authController_1.deleteTeacher);
 exports.default = router;
