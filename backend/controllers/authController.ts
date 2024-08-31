@@ -130,7 +130,7 @@ export const deleteStudent = async (req: Request, res: Response) => {
 
 export const deleteTeacher = async (req: Request, res: Response) => {
   console.log("Request received:", req.body);
-  const { username } = req.query;
+  const { username } = req.body;
   try {
     const user = await UserModel.findOne({ username, role: "teacher" });
     if (!user) {

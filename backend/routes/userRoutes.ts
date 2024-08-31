@@ -9,6 +9,6 @@ router.post('/login', Login);
 router.get('/allstudents',fetchAllStudents);
 router.get('/allteachers',fetchAllTeachers);
 router.delete('/deleteStudent',deleteStudent);
-router.post('/deleteTeacher',deleteTeacher);
+router.delete('/deleteTeacher',deleteTeacher);
 
 export default router;
