@@ -1,10 +1,10 @@
-import React from 'react'
 
+import { SidebarDemo } from "./Sidebardemo"
 const Home = () => {
   return (
-    <div>
-      this is home
-    </div>
+    <>
+      <SidebarDemo/>
+    </>
   )
 }
 
