@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Label } from "../../components/ui/label";
 import { Input } from "../../components/ui/input";
 import { cn } from "../../lib/utils";
@@ -9,17 +9,20 @@ import {
   IconBrandGoogle,
   IconBrandOnlyfans,
 } from "@tabler/icons-react";
-import { Navigate } from "react-router-dom";
+import { useAuth } from "../../lib/AuthContext";
 
 export function SigninFormDemo() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate=useNavigate();
+  const {setUser}=useAuth();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
+    
+
     try {
       const response = await fetch("/api/user/login", {
         method: "POST",
@@ -30,7 +33,13 @@ export function SigninFormDemo() {
       });
       const data = await response.json();
       localStorage.setItem("token", data.token);
+      localStorage.setItem("userId",data.userId);
       console.log("Form submitted", username, password);
+      setUser({
+        userId:data.userId,
+        token:data.token,
+        isAuthenticated:true
+      })
       alert("Login successful");
       navigate("/");
     } catch (error) {
@@ -39,6 +48,7 @@ export function SigninFormDemo() {
       setLoading(false);
       setUsername("");
       setPassword("");
+      
     }
   };
 

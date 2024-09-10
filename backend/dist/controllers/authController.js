@@ -49,7 +49,10 @@ const signUp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
         console.log(newUser);
         const savedUser = yield userModel_1.default.create(newUser);
-        const token = jsonwebtoken_1.default.sign({ id: savedUser._id }, "your_jwt_secret");
+        if (!process.env.JWT_SECRET) {
+            return res.status(500).json({ message: 'Internal Server Error' });
+        }
+        const token = jsonwebtoken_1.default.sign({ id: savedUser._id }, process.env.JWT_SECRET);
         return res.status(201).json({
             message: "User created successfully",
             user: savedUser,
@@ -75,6 +78,7 @@ const Login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 .status(400)
                 .json({ message: "No user with this username exists" });
         }
+        const userId = check_user._id;
         // Compare the provided password with the hashed password in the database
         const isPasswordCorrect = yield bcrypt_1.default.compare(password, check_user.password);
         // If the password is incorrect, return an error
@@ -87,7 +91,7 @@ const Login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const token = jsonwebtoken_1.default.sign({ _id: check_user._id }, process.env.JWT_SECRET, {
             expiresIn: "24h",
         });
-        return res.status(200).json({ token }); // Changed to status 200 for successful login
+        return res.status(200).json({ userId, token }); // Changed to status 200 for successful login
     }
     catch (err) {
         console.error("Error during login:", err);

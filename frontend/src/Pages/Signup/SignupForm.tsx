@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useContext } from "react";
 import { Label } from "../../components/ui/label";
 import { Input } from "../../components/ui/input";
 import { cn } from "../../lib/utils";
@@ -8,16 +8,48 @@ import {
   IconBrandGoogle,
   IconBrandOnlyfans,
 } from "@tabler/icons-react";
+import { useState } from "react";
+import { useAuth } from "@/lib/AuthContext";
 
 export function SignupFormDemo() {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const {setUser}=useAuth();
+  const [data, setData] = useState({
+    username: "",
+    name: "",
+    phoneNumber: "",
+    email: "",
+    password: "",
+    role: "Student",
+    collegeName: "",
+    city: "",
+    state: "",
+    country: "",
+  });
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log(data);
+
+    const result = await fetch("/api/user/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ data }),
+    });
+    const response = await result.json();
+    localStorage.setItem("userId",response.userId);
+    localStorage.setItem("token", response.token);
+    setUser({
+      userId:response.userId,
+      token:response.token,
+      isAuthenticated:true
+    })
     console.log("Form submitted");
   };
   return (
     <div className="max-w-md w-full mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-white dark:bg-black">
       <h2 className="font-bold text-xl text-neutral-800 dark:text-neutral-200">
-        Welcome to Edutech
+        Welcome to Edutech  
       </h2>
       <p className="text-neutral-600 text-sm max-w-sm mt-2 dark:text-neutral-300">
         Signup to Edutech
@@ -26,28 +58,107 @@ export function SignupFormDemo() {
       <form className="my-8" onSubmit={handleSubmit}>
         <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
           <LabelInputContainer>
-            <Label htmlFor="firstname">First name</Label>
-            <Input id="firstname" placeholder="Tyler" type="text" />
+            <Label htmlFor="firstname">Username</Label>
+            <Input
+              id="firstname"
+              placeholder="Tyler"
+              type="text"
+              onChange={(e) => {
+                setData({ ...data, username: e.target.value });
+              }}
+            />
           </LabelInputContainer>
           <LabelInputContainer>
-            <Label htmlFor="lastname">Last name</Label>
-            <Input id="lastname" placeholder="Durden" type="text" />
+            <Label htmlFor="lastname">Name</Label>
+            <Input
+              id="lastname"
+              placeholder="Durden"
+              type="text"
+              onChange={(e) => {
+                setData({ ...data, name: e.target.value });
+              }}
+            />
           </LabelInputContainer>
         </div>
         <LabelInputContainer className="mb-4">
-          <Label htmlFor="email">Email Address</Label>
-          <Input id="email" placeholder="projectmayhem@fc.com" type="email" />
+          <Label htmlFor="email">Phone Number</Label>
+          <Input
+            id="email"
+            placeholder="+91 123456789"
+            type="email"
+            onChange={(e) => {
+              setData({ ...data, phoneNumber: e.target.value });
+            }}
+          />
+        </LabelInputContainer>
+        <LabelInputContainer className="mb-4">
+          <Label htmlFor="email">Email</Label>
+          <Input
+            id="email"
+            placeholder="projectmayhem@fc.com"
+            type="email"
+            onChange={(e) => {
+              setData({ ...data, email: e.target.value });
+            }}
+          />
+        </LabelInputContainer>
+        <LabelInputContainer className="mb-4">
+          <Label htmlFor="Role">Role</Label>
+          <Input id="Role" placeholder="Student" type="text" />
+        </LabelInputContainer>
+        <LabelInputContainer className="mb-4">
+          <Label htmlFor="Name">College Name</Label>
+          <Input
+            id="Name"
+            placeholder="College Name"
+            type="text"
+            onChange={(e) => {
+              setData({ ...data, collegeName: e.target.value });
+            }}
+          />
+        </LabelInputContainer>
+        <LabelInputContainer className="mb-4">
+          <Label htmlFor="email">City</Label>
+          <Input
+            id="email"
+            placeholder="City"
+            type="text"
+            onChange={(e) => {
+              setData({ ...data, city: e.target.value });
+            }}
+          />
+        </LabelInputContainer>
+        <LabelInputContainer className="mb-4">
+          <Label htmlFor="email">State</Label>
+          <Input
+            id="email"
+            placeholder="State"
+            type="text"
+            onChange={(e) => {
+              setData({ ...data, state: e.target.value });
+            }}
+          />
+        </LabelInputContainer>
+        <LabelInputContainer className="mb-4">
+          <Label htmlFor="email">Country</Label>
+          <Input
+            id="email"
+            placeholder="Country"
+            type="text"
+            onChange={(e) => {
+              setData({ ...data, country: e.target.value });
+            }}
+          />
         </LabelInputContainer>
         <LabelInputContainer className="mb-4">
           <Label htmlFor="password">Password</Label>
-          <Input id="password" placeholder="••••••••" type="password" />
-        </LabelInputContainer>
-        <LabelInputContainer className="mb-8">
-          <Label htmlFor="twitterpassword">Your twitter password</Label>
           <Input
-            id="twitterpassword"
+            id="password"
             placeholder="••••••••"
-            type="twitterpassword"
+            type="password"
+            onChange={(e) => {
+              setData({ ...data, password: e.target.value });
+            }}
           />
         </LabelInputContainer>
         <div className="mb-4">
@@ -86,16 +197,6 @@ export function SignupFormDemo() {
             <IconBrandGoogle className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
             <span className="text-neutral-700 dark:text-neutral-300 text-sm">
               Google
-            </span>
-            <BottomGradient />
-          </button>
-          <button
-            className=" relative group/btn flex space-x-2 items-center justify-start px-4 w-full text-black rounded-md h-10 font-medium shadow-input bg-gray-50 dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_var(--neutral-800)]"
-            type="submit"
-          >
-            <IconBrandOnlyfans className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
-            <span className="text-neutral-700 dark:text-neutral-300 text-sm">
-              OnlyFans
             </span>
             <BottomGradient />
           </button>
