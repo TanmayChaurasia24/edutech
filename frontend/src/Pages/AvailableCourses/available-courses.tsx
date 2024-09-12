@@ -16,16 +16,42 @@ export default function AvailableCoursesComp() {
         Authorization: "Bearer " + localStorage.getItem("token"),
       },
     });
+   
     const ans = await response.json();
     setData(ans);
     console.log("data", data);
   };
 
+  const enrollinCourse = async (courseId:string)=>{
+      const userId=localStorage.getItem("userId");
+      console.log("userid",userId)
+      console.log("courseId",courseId)
+      try{
+      const response = await fetch(`/api/course/${courseId}/${userId}/add`,{
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json",
+          Authorization:"Bearer "+localStorage.getItem("token")
+        }
+      })
+      const ans=await response.json();
+      console.log(ans);
+      alert(`You are Enrolled Successfully in ${ans.name} course`)
+    }catch(error){
+      console.log(error)
+    }
+  }
   useEffect(() => {
     getCourses();
   }, []);
 
-  
+  // const enrollinCourse = await fetch("/api/course/66df0fbd509358bbd459f2cc/66dda86944eb01c7bdf95e3a/add",{
+  //   method: "POST",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //     Authorization: "Bearer " + localStorage.getItem("token"),
+  //   },
+  // }) 
 
   const navigateTo = (name: string) => {
     console.log("clicked");
@@ -64,8 +90,8 @@ export default function AvailableCoursesComp() {
                   <div className="flex w-full justify-center">
                     <Button
                       key={course._id}
-                      onClick={() => navigateTo(course.name.replaceAll(" ", "-"))}
                       className="h-8 w-32"
+                      onClick={()=>{enrollinCourse(course._id)}}
                     > 
                       Enroll Now
                     </Button>

@@ -1,12 +1,57 @@
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuCheckboxItem } from "@/components/ui/dropdown-menu"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuCheckboxItem,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function EnrolledCoursesComp() {
+  const [data, setData] = useState<any>([]);
+  const navigate=useNavigate();
 
-  const getCourses = async()=>{
-    const response = await fetch("/api/")
-  }
+  const getCourses = async () => {
+    try {
+      const response = await fetch(
+        `/api/course/enrolledCourses/${localStorage.getItem("userId")}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        }
+      );
+
+      if (!response.ok) {
+        // Handle non-2xx HTTP responses
+        console.error("Network response was not ok", response.statusText);
+        return;
+      }
+
+      const contentType = response.headers.get("Content-Type");
+      if (!contentType || !contentType.includes("application/json")) {
+        // Handle non-JSON responses
+        console.error("Expected JSON but received", contentType);
+        return;
+      }
+
+      const ans = await response.json();
+      console.log(ans);
+      setData(ans);
+    } catch (error) {
+      console.error("Failed to fetch courses", error);
+    }
+  };
+
+  useEffect(() => {
+    getCourses();
+  }, []);
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -33,73 +78,28 @@ export default function EnrolledCoursesComp() {
       </header>
       <main className="flex-1 py-8 px-6">
         <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <Card>
-            <CardContent>
-              <h3 className="text-lg font-semibold">Introduction to Computer Science</h3>
-              <div className="text-muted-foreground">
-                <p>Instructor: Jane Smith</p>
-                <p>Semester: Fall 2023</p>
-                <p>Dates: September 1 - December 15</p>
-              </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent>
-              <h3 className="text-lg font-semibold">Calculus I</h3>
-              <div className="text-muted-foreground">
-                <p>Instructor: John Doe</p>
-                <p>Semester: Spring 2023</p>
-                <p>Dates: January 15 - May 15</p>
-              </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent>
-              <h3 className="text-lg font-semibold">Introduction to Psychology</h3>
-              <div className="text-muted-foreground">
-                <p>Instructor: Sarah Lee</p>
-                <p>Semester: Fall 2023</p>
-                <p>Dates: September 1 - December 15</p>
-              </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent>
-              <h3 className="text-lg font-semibold">Principles of Economics</h3>
-              <div className="text-muted-foreground">
-                <p>Instructor: Michael Johnson</p>
-                <p>Semester: Spring 2023</p>
-                <p>Dates: January 15 - May 15</p>
-              </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent>
-              <h3 className="text-lg font-semibold">Introduction to Biology</h3>
-              <div className="text-muted-foreground">
-                <p>Instructor: Emily Chen</p>
-                <p>Semester: Fall 2023</p>
-                <p>Dates: September 1 - December 15</p>
-              </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent>
-              <h3 className="text-lg font-semibold">American History</h3>
-              <div className="text-muted-foreground">
-                <p>Instructor: David Lee</p>
-                <p>Semester: Spring 2023</p>
-                <p>Dates: January 15 - May 15</p>
-              </div>
-            </CardContent>
-          </Card>
+          {data.courses?.map((course: any) => {
+            return (
+              <Card>
+                <CardContent>
+                  <div key={course._id}>
+                    <h1 className="text-xl font-bold">{course.name}</h1>
+                    <p className="p-4">{course.description}</p>
+                  </div>
+                  <Button onClick={()=>{
+                    navigate(course.name.replaceAll(" ","-"))
+                  }}>View Course</Button>
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
       </main>
     </div>
-  )
+  );
 }
 
-function ChevronDownIcon({props}:any) {
+function ChevronDownIcon({ props }: any) {
   return (
     <svg
       {...props}
@@ -115,5 +115,5 @@ function ChevronDownIcon({props}:any) {
     >
       <path d="m6 9 6 6 6-6" />
     </svg>
-  )
+  );
 }

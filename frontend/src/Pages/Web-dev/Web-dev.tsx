@@ -29,7 +29,7 @@ const enrollWebDev=async()=>{
 }
 
   return (
-    <div className="flex flex-col h-screen gap-40">
+    <div className="flex flex-col h-full gap-40">
       <div className=" h-[80vh] flex flex-row">
         <div className="h-full w-1/2 flex flex-col justify-center m-4">
           <h1 className="font-semibold text-5xl w-full">
@@ -49,7 +49,7 @@ const enrollWebDev=async()=>{
           ></img>
         </div>
       </div>
-      <div className="h-[50vh]">
+      <div className="h-full">
         <div className="w-full h-full flex flex-col justify-center gap-4 items-center">
           <div className="h-6 w-20 bg-slate-200 rounded-lg"></div>
           <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">
@@ -101,7 +101,7 @@ const enrollWebDev=async()=>{
           </div>
         </div>
       </div>
-      <div className="h-[50vh]">
+      <div className="h-full">
         <div className="w-full h-full flex flex-col justify-center gap-4 items-center">
           <div className="h-6 w-20 bg-slate-200 rounded-lg"></div>
           <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">

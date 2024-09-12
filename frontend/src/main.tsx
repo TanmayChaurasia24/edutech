@@ -11,6 +11,7 @@ import EnrolledCourses from "./Pages/EnrolledCourses/EnrolledCourses.tsx";
 import AvailableCourses from "./Pages/AvailableCourses/AvailableCourses.js";
 import DataStrutureandAlgorithm from "./Pages/Data-Structure-and-Algorithm/Data-Struture-and-Algorithm.tsx";
 import { AuthProvider } from "./lib/AuthContext"; // Import AuthProvider
+import Profile from "./Pages/Profile/Profile.tsx";
 
 const router = createBrowserRouter([
   {
@@ -30,7 +31,7 @@ const router = createBrowserRouter([
         element: <Signin />, // Signin route
       },
       {
-        path: "/Web-development",
+        path: "/enrolled-courses/Web-development",
         element: <Webdev />,
       },
       {
@@ -42,9 +43,13 @@ const router = createBrowserRouter([
         element: <AvailableCourses />,
       },
       {
-        path: "/Data-structure-and-algorithm",
+        path: "/enrolled-courses/Data-structure-and-algorithm",
         element: <DataStrutureandAlgorithm />,
       },
+      {
+        path: "/profile",
+        element: <Profile/>,
+      }
     ],
   },
 ]);

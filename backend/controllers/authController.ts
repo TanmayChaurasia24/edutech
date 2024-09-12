@@ -113,6 +113,33 @@ export const fetchAllTeachers = async (req: Request, res: Response) => {
   return res.status(200).json({ teacher, num_teacher });
 };
 
+
+export const fetchUser = async (req:Request,res:Response)=>{
+  const {userId}=req.params;
+  try{
+    const user=await UserModel.findById(userId);
+    if(!user){
+      return res.status(404).json({
+        message:"User not found"
+      })
+    }
+    else{
+      console.log(user)
+      return res.status(200).json({
+        user
+      })
+
+    }
+
+  }catch(e){
+    return res.status(500).json({
+      message:"Internal server error"
+    })
+  }
+
+
+}
+
 export const deleteStudent = async (req: Request, res: Response) => {
   console.log("Request received:", req.body);
   const { username } = req.body;

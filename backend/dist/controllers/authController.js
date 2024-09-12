@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteTeacher = exports.deleteStudent = exports.fetchAllTeachers = exports.fetchAllStudents = exports.Login = exports.signUp = void 0;
+exports.deleteTeacher = exports.deleteStudent = exports.fetchUser = exports.fetchAllTeachers = exports.fetchAllStudents = exports.Login = exports.signUp = void 0;
 const userSchema_1 = require("../schemas/userSchema");
 const userModel_1 = __importDefault(require("../models/userModel"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
@@ -112,6 +112,29 @@ const fetchAllTeachers = (req, res) => __awaiter(void 0, void 0, void 0, functio
     return res.status(200).json({ teacher, num_teacher });
 });
 exports.fetchAllTeachers = fetchAllTeachers;
+const fetchUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { userId } = req.params;
+    try {
+        const user = yield userModel_1.default.findById(userId);
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found"
+            });
+        }
+        else {
+            console.log(user);
+            return res.status(200).json({
+                user
+            });
+        }
+    }
+    catch (e) {
+        return res.status(500).json({
+            message: "Internal server error"
+        });
+    }
+});
+exports.fetchUser = fetchUser;
 const deleteStudent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("Request received:", req.body);
     const { username } = req.body;
