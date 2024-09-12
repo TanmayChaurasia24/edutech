@@ -64,12 +64,12 @@ const fetchCourseArticles = (req, res) => __awaiter(void 0, void 0, void 0, func
 });
 exports.fetchCourseArticles = fetchCourseArticles;
 const enrolledcourses = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { studentId } = req.params;
-    if (!mongoose_1.default.Types.ObjectId.isValid(studentId)) {
+    const { userId } = req.params;
+    if (!mongoose_1.default.Types.ObjectId.isValid(userId)) {
         return res.status(400).json({ message: "Invalid student ID" });
     }
     try {
-        const findstudent = yield userModel_1.default.findById(studentId).populate('enrolledCourses');
+        const findstudent = yield userModel_1.default.findById(userId).populate('enrolledCourses');
         if (!findstudent) {
             return res.status(404).json({ message: "Student not found" });
         }

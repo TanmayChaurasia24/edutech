@@ -6,7 +6,6 @@ import { HeaderNav, NavbarDemo } from '../Home/NavbarDemo'
 const Signup = () => {
   return (
     <div>
-      <HeaderNav/>
         <SignupFormDemo />
     </div>
   )

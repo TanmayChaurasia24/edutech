@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   HoveredLink,
   Menu,
@@ -9,6 +9,9 @@ import {
 import { cn } from "../../lib/utils";
 import { ModeToggle } from "@/components/mode-toggle";
 // import { ModeToggle } from "../components/mode-toggle";
+import { useAuth } from "../../lib/AuthContext";
+import Signout from "../../components/signout";
+import Signin from "../Signin/Signin";
 
 export function NavbarDemo() {
   return (
@@ -33,7 +36,7 @@ function Navbar({ className }: { className?: string }) {
             <div className="flex flex-col space-y-4 text-sm">
               <HoveredLink href="/web-dev">Web Development</HoveredLink>
               <HoveredLink href="/interface-design">
-                Interface Design
+                Data Structure and algorithms
               </HoveredLink>
               <HoveredLink href="/seo">Search Engine Optimization</HoveredLink>
               <HoveredLink href="/branding">Branding</HoveredLink>
@@ -85,13 +88,13 @@ function Navbar({ className }: { className?: string }) {
               <HoveredLink href="/branding">Branding</HoveredLink>
             </div>
           </MenuItem>
-          <MenuItem setActive={setActive} active={active} item="Teachers">
+          <MenuItem setActive={setActive} active={active} item="Profile">
             <div className="flex flex-col space-y-4 text-sm">
-              <HoveredLink href="/web-dev">Web Development</HoveredLink>
-              <HoveredLink href="/interface-design">
-                Interface Design
+              <HoveredLink href="/enrolled-courses">Enrolled Courses</HoveredLink>
+              <HoveredLink href="/profile">
+                Profile
               </HoveredLink>
-              <HoveredLink href="/seo">Search Engine Optimization</HoveredLink>
+              <HoveredLink href="/available-courses">Available Courses</HoveredLink>
               <HoveredLink href="/branding">Branding</HoveredLink>
             </div>
           </MenuItem>
@@ -102,6 +105,7 @@ function Navbar({ className }: { className?: string }) {
 }
 
 export function HeaderNav() {
+  const {user}=useAuth();
   return (
     <div className="mb-10">
       <div className="flex items-center justify-evenly">
@@ -115,7 +119,7 @@ export function HeaderNav() {
             <a href="/signin" className="relative inline-block p-[3px]">
               <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-lg pointer-events-none" />
               <div className="relative px-6 py-2 bg-black rounded-[6px] text-white transition duration-200 group-hover:bg-transparent group-hover:text-black">
-                Signin
+                  {user.isAuthenticated ? <Signout/> : "Signin"}
               </div>
             </a>
           </div>

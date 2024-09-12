@@ -43,8 +43,11 @@ export const signUp = async (req: Request, res: Response) => {
     console.log(newUser);
 
     const savedUser = await UserModel.create(newUser);
+    if(!process.env.JWT_SECRET){
+        return res.status(500).json({ message: 'Internal Server Error' });
+    }
 
-    const token = jwt.sign({ id: savedUser._id }, "your_jwt_secret");
+    const token = jwt.sign({ id: savedUser._id }, process.env.JWT_SECRET);
 
     return res.status(201).json({
       message: "User created successfully",
@@ -72,7 +75,7 @@ export const Login = async (req: Request, res: Response) => {
         .status(400)
         .json({ message: "No user with this username exists" });
     }
-
+    const userId=check_user._id
     // Compare the provided password with the hashed password in the database
     const isPasswordCorrect = await bcrypt.compare(
       password,
@@ -90,7 +93,7 @@ export const Login = async (req: Request, res: Response) => {
       expiresIn: "24h",
     });
 
-    return res.status(200).json({ token }); // Changed to status 200 for successful login
+    return res.status(200).json({ userId,token }); // Changed to status 200 for successful login
   } catch (err) {
     console.error("Error during login:", err);
     return res.status(500).json({ message: "Internal Server Error" });
@@ -109,6 +112,33 @@ export const fetchAllTeachers = async (req: Request, res: Response) => {
   const num_teacher = await UserModel.countDocuments({ role: "teacher" });
   return res.status(200).json({ teacher, num_teacher });
 };
+
+
+export const fetchUser = async (req:Request,res:Response)=>{
+  const {userId}=req.params;
+  try{
+    const user=await UserModel.findById(userId);
+    if(!user){
+      return res.status(404).json({
+        message:"User not found"
+      })
+    }
+    else{
+      console.log(user)
+      return res.status(200).json({
+        user
+      })
+
+    }
+
+  }catch(e){
+    return res.status(500).json({
+      message:"Internal server error"
+    })
+  }
+
+
+}
 
 export const deleteStudent = async (req: Request, res: Response) => {
   console.log("Request received:", req.body);
