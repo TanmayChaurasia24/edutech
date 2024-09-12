@@ -23,6 +23,10 @@ interface apiresponse {
   num_teacher: number;
 }
 
+interface SendingData{
+  username: string;
+}
+
 const Students: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -43,7 +47,27 @@ const Students: React.FC = () => {
   }, []);
 
   if (error) return <div>Error: {error}</div>;
+  const handleTeacherDelete = async (username: string) => {
+    const data: SendingData = { username };
+  
+    try {
 
+      await axios.request({
+        url: "http://localhost:8000/api/user/deleteTeacher",
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data,
+      });
+      console.log("request send");
+      
+      setUsers((prevUsers) => prevUsers.filter(user => user.username !== username));
+  
+    } catch (error) {
+      setError((error as Error).message);
+    }
+  };
   return (
     <>
       <div className="admincontainer flex">
@@ -94,7 +118,7 @@ const Students: React.FC = () => {
                   </>
                 )}
                 <div className="all-btn">
-                  <button className="single-btn delete-btn">Delete</button>
+                  <button className="single-btn delete-btn" onClick={() => handleTeacherDelete(user.username)}>Delete</button>
                   <button className="single-btn edit-btn">Edit</button>
                   <button className="single-btn block-btn">Block</button>
                 </div>

@@ -9,6 +9,6 @@ router.get('/all',fetchAllCourse);
 router.get("/enrolledCourses/:userId",authenticate,enrolledcourses);
 router.get('/:courseId/articles',authenticate, fetchCourseArticles);
 router.post('/:courseId/:studentId/add',authenticate,enrollStudentInCourse);
-router.post('/courseDelete',deleteCourse);
+router.delete('/courseDelete',deleteCourse);
 
 export default router;
