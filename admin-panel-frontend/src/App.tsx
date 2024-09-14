@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import Loader from "./components/Loader.tsx";
+import Home from "./pages/Home.tsx";
 
 const Dashboard = lazy(() => import("./pages/Dashboard.tsx"));
 const Courses = lazy(() => import("./pages/Courses.tsx"));
@@ -14,6 +15,7 @@ const App = () => {
       <BrowserRouter>
         <Suspense fallback={<Loader />}>
           <Routes>
+            <Route path="/" element={<Home />}></Route>
             <Route path="/admin/dashboard" element={<Dashboard />}></Route>
             <Route path="/admin/courses" element={<Courses />}></Route>
             <Route path="/admin/students" element={<Students />}></Route>
