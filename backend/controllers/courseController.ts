@@ -29,6 +29,7 @@ export const createCourse = async (req: Request, res: Response) => {
 };
 
 export const fetchAllCourse = async (req: Request, res: Response) => {
+    // const {courseId}=req.params;
     try {
         const fetchall = await Course.find();
         const numberOfCourses = await Course.countDocuments();

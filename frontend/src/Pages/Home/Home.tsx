@@ -6,16 +6,21 @@ import { LayoutGridDemo } from "./Layout";
 import { TextGenerateEffectDemo } from "./TextArea";
 import { Sheet } from "@/components/ui/sheet";
 import Chat from "./Chat";
-import { BackgroundBeamsDemo } from "./BackgroundBeamsDemo";
+// import { BackgroundBeamsDemo } from "./BackgroundBeamsDemo";
+import Hero from "./Hero";
+import Feature from "./Feature";
+import Whyus from "./Whyus";
+import Testimonials from "./Testimonials";
 // import App from "../../App"
 
 const Home = () => {
   return (
-    <div>
-      <BackgroundBeamsDemo/>
-      <TextGenerateEffectDemo/>
-      <Chat/>
-      <LayoutGridDemo/>
+    <div className="flex flex-col h-auto gap-40 p-5">
+      <Hero/>
+      <Feature/>
+      <Testimonials/>
+      <Whyus/>
+      {/* <Chat/> */}
     </div>
   );
 };

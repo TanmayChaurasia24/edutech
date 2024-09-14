@@ -5,6 +5,9 @@ import { useNavigate } from "react-router-dom";
 
 export default function AvailableCoursesComp() {
   const [data, setData] = useState([]);
+  const [enrolledCourses, setEnrolledCourses] = useState([]);
+  const [totalCourses, setTotalCourses] = useState([]);
+  const [coursesToDisplay,setCoursesToDisplay]=useState([]);
   // const [routes, setRoutes] = useState([]);
   const navigate = useNavigate();
 
@@ -18,14 +21,21 @@ export default function AvailableCoursesComp() {
     });
    
     const ans = await response.json();
+    // console.log("ans",ans);
     setData(ans);
-    console.log("data", data);
+    // console.log(ans.fetchall);
+    // for(let i=0;i<ans.fetchall.length;i++){
+    //   console.log(ans.fetchall[i]._id)
+    // }
+    const totalCourse=ans.fetchall.map((course:any)=>course);
+    setTotalCourses(totalCourse);
+    console.log("totalcourses",totalCourses);
   };
 
   const enrollinCourse = async (courseId:string)=>{
       const userId=localStorage.getItem("userId");
-      console.log("userid",userId)
-      console.log("courseId",courseId)
+      // console.log("userid",userId)
+      // console.log("courseId",courseId)
       try{
       const response = await fetch(`/api/course/${courseId}/${userId}/add`,{
         method:"POST",
@@ -44,6 +54,49 @@ export default function AvailableCoursesComp() {
   useEffect(() => {
     getCourses();
   }, []);
+
+  const display = async () => {
+    // Ensure that `enrolledCourses` and `totalCourses` have been set
+    if (totalCourses.length > 0 && enrolledCourses.length > 0) {
+      const availableCourses = totalCourses.filter(course =>
+        !enrolledCourses.some(enrolledCourse => enrolledCourse === course._id)
+      );
+      
+      console.log("AVAILABLE COURSES", availableCourses);
+      setCoursesToDisplay(availableCourses);
+    }
+  };
+  
+  useEffect(() => {
+    fetchUser();
+    getCourses();
+  }, []);
+  
+  useEffect(() => {
+    display();
+  }, [totalCourses, enrolledCourses]);
+  
+  
+
+
+  const fetchUser = async ()=>{
+    const userId = localStorage.getItem("userId");
+    const response = await fetch(`/api/user/currentuser/${userId}`,{
+      method:"GET",
+      headers:{
+        "Content-Type":"application/json",
+        Authorization:`Bearer ${localStorage.getItem("token")}`
+      }
+    })
+    const ans = await response.json();
+    setEnrolledCourses(ans.user.enrolledCourses);
+    console.log("enrolled courses",ans.user.enrolledCourses)
+    
+  }
+
+  useEffect(()=>{
+    fetchUser();
+  },[])
 
   // const enrollinCourse = await fetch("/api/course/66df0fbd509358bbd459f2cc/66dda86944eb01c7bdf95e3a/add",{
   //   method: "POST",
@@ -78,14 +131,15 @@ export default function AvailableCoursesComp() {
       </section>
       <section className="w-full py-12 md:py-24 lg:py-32">
         <div className="container grid grid-cols-1 gap-8 px-4 md:px-6 sm:grid-cols-2 lg:grid-cols-3">
-          {Array.isArray((data as any).fetchall) &&
-          (data as any).fetchall.length > 0 ? (
-            (data as any).fetchall.map((course: any) => {
+          {Array.isArray((coursesToDisplay as any)) &&
+          (coursesToDisplay as any).length > 0 ? (
+            (coursesToDisplay as any).map((course: any) => {
               return (
                 <CardContent key={course._id} className="border-2 rounded-lg p-6">
                   <div className="flex flex-col gap-8">
                     <h3 className="text-xl font-bold">{course.name}</h3>
                     <p>{course.description}</p>
+                    {/* <p>Total Courses: {totalCourses.map((course:any)=>course._id)}</p> */}
                   </div>
                   <div className="flex w-full justify-center">
                     <Button
