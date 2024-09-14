@@ -38,6 +38,7 @@ const createCourse = (req, res) => __awaiter(void 0, void 0, void 0, function* (
 });
 exports.createCourse = createCourse;
 const fetchAllCourse = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    // const {courseId}=req.params;
     try {
         const fetchall = yield courseModel_1.default.find();
         const numberOfCourses = yield courseModel_1.default.countDocuments();

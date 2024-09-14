@@ -14,10 +14,10 @@ import { PlaceholdersAndVanishInputDemo } from "./Input";
 
 const Chat = () => {
   return (
-    <div className="flex flex-col items-center justify-center ">
-      <Sheet>
+    <div className="flex items-center justify-center h-full w-full"> {/* Add `relative` to parent container */} 
+      <Sheet> {/* Add `absolute` positioning */}
         <SheetTrigger className="justify-between w-52 border-2 border-white p-2 rounded-lg">
-          CLick here to Chat
+          Click here to Chat
         </SheetTrigger>
         <SheetContent>
           <SheetHeader>
@@ -25,58 +25,22 @@ const Chat = () => {
               <PlaceholdersAndVanishInputDemo />
             </div>
             <div className="flex flex-col justify-between">
-              <div className="flex flex-row items-center hover:bg-slate-100 dark:hover:bg-slate-800 rounded p-2">
-                <ProfilePic />
-                <div className="ml-2">
-                  <SheetTitle>Anurag negi</SheetTitle>
-                  <SheetDescription>
-                    Anurag negi is a remote software....{" "}
-                    <span className="text-indigo-500 font-bold">(19:28)</span>
-                  </SheetDescription>
+              {/* Chat content here */}
+              {Array(5).fill("").map((_, idx) => (
+                <div
+                  key={idx}
+                  className="flex flex-row items-center hover:bg-slate-100 dark:hover:bg-slate-800 rounded p-2"
+                >
+                  <ProfilePic />
+                  <div className="ml-2">
+                    <SheetTitle>Anurag negi</SheetTitle>
+                    <SheetDescription>
+                      Anurag negi is a remote software....{" "}
+                      <span className="text-indigo-500 font-bold">(19:28)</span>
+                    </SheetDescription>
+                  </div>
                 </div>
-              </div>
-
-              <div className="flex flex-row items-center  hover:bg-slate-100 dark:hover:bg-slate-800 rounded p-2">
-                <ProfilePic />
-                <div className="ml-2">
-                  <SheetTitle>Anurag negi</SheetTitle>
-                  <SheetDescription>
-                    Anurag negi is a remote software....{" "}
-                    <span className="text-indigo-500 font-bold">(19:28)</span>
-                  </SheetDescription>
-                </div>
-              </div>
-
-              <div className="flex flex-row items-center  hover:bg-slate-100 dark:hover:bg-slate-800 rounded p-2">
-                <ProfilePic />
-                <div className="ml-2">
-                  <SheetTitle>Anurag negi</SheetTitle>
-                  <SheetDescription>
-                    Anurag negi is a remote software....{" "}
-                    <span className="text-indigo-500 font-bold">(19:28)</span>
-                  </SheetDescription>
-                </div>
-              </div>
-              <div className="flex flex-row items-center  hover:bg-slate-100 dark:hover:bg-slate-800 rounded p-2">
-                <ProfilePic />
-                <div className="ml-2">
-                  <SheetTitle>Anurag negi</SheetTitle>
-                  <SheetDescription>
-                    Anurag negi is a remote software....{" "}
-                    <span className="text-indigo-500 font-bold">(19:28)</span>
-                  </SheetDescription>
-                </div>
-              </div>
-              <div className="flex flex-row items-centerv hover:bg-slate-100 dark:hover:bg-slate-800 rounded p-2">
-                <ProfilePic />
-                <div className="ml-2">
-                  <SheetTitle>Anurag negi</SheetTitle>
-                  <SheetDescription>
-                    Anurag negi is a remote software....{" "}
-                    <span className="text-indigo-500 font-bold">(19:28)</span>
-                  </SheetDescription>
-                </div>
-              </div>
+              ))}
             </div>
           </SheetHeader>
         </SheetContent>
