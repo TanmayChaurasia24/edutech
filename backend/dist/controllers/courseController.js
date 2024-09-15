@@ -122,7 +122,7 @@ const deleteCourse = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         if (!coursefind) {
             return res.status(404).json({ message: "Course not found" });
         }
-        yield courseModel_1.default.deleteOne({ name });
+        yield coursefind.deleteOne();
         return res.status(200).json({ message: "Course deleted successfully" });
     }
     catch (error) {

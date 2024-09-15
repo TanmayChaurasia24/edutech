@@ -11,15 +11,17 @@ import Hero from "./Hero";
 import Feature from "./Feature";
 import Whyus from "./Whyus";
 import Testimonials from "./Testimonials";
+import { ShimmerButtonDemo } from "@/components/Shimmerbutton";
 // import App from "../../App"
 
 const Home = () => {
   return (
-    <div className="flex flex-col h-auto gap-40 p-5">
+    <div className="flex flex-col h-auto gap-20 p-5">
       <Hero/>
       <Feature/>
       <Testimonials/>
       <Whyus/>
+      <Chat/>
       {/* <Chat/> */}
     </div>
   );

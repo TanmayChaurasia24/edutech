@@ -12,10 +12,49 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sendMessage = void 0;
+exports.sendMessage = exports.fetchMessages = exports.fetchUsers = void 0;
 const messageModel_1 = __importDefault(require("../models/messageModel"));
 const messageSchema_1 = require("../schemas/messageSchema");
 const conversationModel_1 = __importDefault(require("../models/conversationModel"));
+const userModel_1 = __importDefault(require("../models/userModel"));
+const fetchUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const user = yield userModel_1.default.find({});
+        if (!user) {
+            return res.status(500).json({
+                message: "No users",
+            });
+        }
+        return res.status(200).json({
+            totalUsers: user,
+        });
+    }
+    catch (e) {
+        return res.status(500).json({
+            message: "Internal server error",
+        });
+    }
+});
+exports.fetchUsers = fetchUsers;
+const fetchMessages = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { recieverId } = req.params;
+    const { senderId } = req.params;
+    try {
+        const messages = yield messageModel_1.default.find({
+            recieverId: recieverId,
+            senderId: senderId,
+        });
+        return res.status(200).json({
+            messages,
+        });
+    }
+    catch (e) {
+        return res.status(500).json({
+            message: "Internal server error",
+        });
+    }
+});
+exports.fetchMessages = fetchMessages;
 const sendMessage = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const message = messageSchema_1.messageSchema.safeParse(req.body);
@@ -44,7 +83,7 @@ const sendMessage = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         const newMessage = yield messageModel_1.default.create({
             senderId: senderId,
             recieverId: recieverId,
-            message: message.data.message
+            message: message.data.message,
         });
         if (!newMessage) {
             return res.status(500).json({
