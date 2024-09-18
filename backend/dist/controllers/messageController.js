@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sendMessage = exports.fetchMessages = exports.fetchUsers = void 0;
+exports.extractMessages = exports.fetchConversation = exports.sendMessage = exports.fetchMessages = exports.fetchUsers = void 0;
 const messageModel_1 = __importDefault(require("../models/messageModel"));
 const messageSchema_1 = require("../schemas/messageSchema");
 const conversationModel_1 = __importDefault(require("../models/conversationModel"));
@@ -37,18 +37,30 @@ const fetchUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 });
 exports.fetchUsers = fetchUsers;
 const fetchMessages = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { recieverId } = req.params;
-    const { senderId } = req.params;
+    const { receiverId, senderId } = req.params;
+    console.log("ReceiverId:", receiverId);
+    console.log("SenderId:", senderId);
     try {
+        // Query messages where either the senderId or receiverId matches
         const messages = yield messageModel_1.default.find({
-            recieverId: recieverId,
-            senderId: senderId,
+            $or: [
+                { senderId: senderId, recieverId: receiverId },
+                { senderId: receiverId, recieverId: senderId },
+            ],
         });
+        // If no messages are found, return 404
+        if (!messages || messages.length === 0) {
+            return res.status(404).json({
+                message: "No messages found",
+            });
+        }
+        // If messages are found, return them
         return res.status(200).json({
             messages,
         });
     }
-    catch (e) {
+    catch (error) {
+        console.error("Error fetching messages:", error);
         return res.status(500).json({
             message: "Internal server error",
         });
@@ -106,3 +118,47 @@ const sendMessage = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.sendMessage = sendMessage;
+const fetchConversation = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    try {
+        const conversation = yield conversationModel_1.default.findOne({ participants: id });
+        if (!conversation) {
+            return res.status(404).json({
+                message: "Conversation not found",
+            });
+        }
+        return res.status(200).json({
+            conversation,
+        });
+    }
+    catch (e) {
+        return res.status(500).json({
+            message: "Internal server error",
+        });
+    }
+});
+exports.fetchConversation = fetchConversation;
+const extractMessages = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { messageId } = req.params;
+    try {
+        console.log("Received messageId:", messageId); // Log the messageId
+        // Query by `_id` or custom `messageId`
+        const message = yield messageModel_1.default.findOne({ _id: messageId }); // Adjust field if using a custom field
+        console.log("Message result:", message); // Log the message result
+        if (!message) {
+            return res.status(404).json({
+                message: "Message not found",
+            });
+        }
+        return res.status(200).json({
+            message,
+        });
+    }
+    catch (e) {
+        console.error("Error fetching message:", e);
+        return res.status(500).json({
+            message: "Internal server error",
+        });
+    }
+});
+exports.extractMessages = extractMessages;

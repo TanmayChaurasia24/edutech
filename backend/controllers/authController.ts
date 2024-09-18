@@ -117,6 +117,7 @@ export const fetchAllTeachers = async (req: Request, res: Response) => {
 export const fetchUser = async (req:Request,res:Response)=>{
   const {userId}=req.params;
   try{
+    console.log("User Id",userId)
     const user=await UserModel.findById(userId);
     if(!user){
       return res.status(404).json({
@@ -124,7 +125,7 @@ export const fetchUser = async (req:Request,res:Response)=>{
       })
     }
     else{
-      console.log(user)
+      console.log("User",user)
       return res.status(200).json({
         user
       })

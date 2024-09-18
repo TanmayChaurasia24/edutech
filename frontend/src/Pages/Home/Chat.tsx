@@ -21,6 +21,7 @@ const Chat = () => {
   // const [msg,setMsg]=useState<string>("");
   const [chatMessage, setChatMessage] = useState<string>("");
   const [receiverId, setReceiverId] = useState<string>("");
+  const [currentUser,setCurrentUser]=useState<string>("");
 
   const fetchData = async () => {
     try {
@@ -36,6 +37,7 @@ const Chat = () => {
       }
 
       const data = await response.json();
+      console.log(data);
       setAllUsers(data.totalUsers);
     } catch (error) {
       console.error("Error fetching users:", error);
@@ -64,7 +66,7 @@ const Chat = () => {
       const response = await fetch(
         `/api/message/fetchmessages/${localStorage.getItem(
           "userId"
-        )}//${receiverId}`,
+        )}/${receiverId}`,
         {
           method: "GET",
           headers: {
@@ -74,21 +76,49 @@ const Chat = () => {
         }
       );
 
+      // Handle non-OK responses
       if (!response.ok) {
+        if (response.status === 404) {
+          console.log("No messages found.");
+          setMessages([]); // Set empty messages array when 404
+          return;
+        }
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
       const data = await response.json();
+
+      // Handle case when no messages exist (null, empty, etc.)
+      if (!data || !data.messages || data.messages.length === 0) {
+        setMessages([]); // Set to empty array when no messages found
+        return;
+      }
+
+      // If messages are found, set them
       setMessages(data.messages);
     } catch (error) {
       console.error("Error fetching messages:", error);
     }
   };
 
+  const currentUserfun=async(userId:string)=>{
+    const response=await (fetch(`/api/user/currentuser/${userId}`,{
+        method:"GET",
+        headers:{
+          "Content-Type":"application/json",
+          "Authorization":`Bearer ${localStorage.getItem("token")}`
+        }
+    }))
+    const data=await response.json();
+    console.log("Current User:",data.user.username);
+    setCurrentUser(data.user.username);
+  }
+
   const handleUserClick = (userId: string) => {
     setSelectedUser(userId);
     fetchMessages(userId);
     setReceiverId(userId);
+    currentUserfun(userId);
   };
 
   const handleBackClick = () => {
@@ -146,7 +176,7 @@ const Chat = () => {
                         src="https://avatars.githubusercontent.com/u/115611556?v=4"
                         alt=""
                       />
-                      <h1 className="text-lg font-semi-bold">Anurag Negi</h1>
+                      <h1 className="text-lg font-semi-bold">{currentUser}</h1>
                     </div>
                     <Button className="h-10 w-16" onClick={handleBackClick}>
                       Back

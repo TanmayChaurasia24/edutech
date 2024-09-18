@@ -12,6 +12,7 @@ import AvailableCourses from "./Pages/AvailableCourses/AvailableCourses.js";
 import DataStrutureandAlgorithm from "./Pages/Data-Structure-and-Algorithm/Data-Struture-and-Algorithm.tsx";
 import { AuthProvider } from "./lib/AuthContext"; // Import AuthProvider
 import Profile from "./Pages/Profile/Profile.tsx";
+import { SocketProvider } from "./context/SocketContext.tsx";
 
 const router = createBrowserRouter([
   {
@@ -48,16 +49,20 @@ const router = createBrowserRouter([
       },
       {
         path: "/profile",
-        element: <Profile/>,
-      }
+        element: <Profile />,
+      },
     ],
   },
 ]);
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <AuthProvider> {/* Wrap the entire application with AuthProvider */}
-      <RouterProvider router={router} />
-    </AuthProvider>
+    <SocketProvider>
+      <AuthProvider>
+        {" "}
+        {/* Wrap the entire application with AuthProvider */}
+        <RouterProvider router={router} />
+      </AuthProvider>
+    </SocketProvider>
   </StrictMode>
 );
