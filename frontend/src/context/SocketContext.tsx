@@ -13,7 +13,6 @@ export const SocketProvider=({children}:{children:React.ReactNode})=>{
   useEffect(()=>{
     const newSocket=io(SOCKET_URL,{
       transports:["websocket"],
-      query:{userId:"user123"},
     });
     setSocket(newSocket);
 

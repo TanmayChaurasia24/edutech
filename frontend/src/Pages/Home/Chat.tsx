@@ -13,8 +13,10 @@ import { PlaceholdersAndVanishInputDemo } from "./Input";
 import { ShimmerButtonDemo } from "@/components/Shimmerbutton";
 import { Button } from "@/components/ui/button";
 import { Send } from "lucide-react";
+import { useSocket } from "@/context/SocketContext";
 
 const Chat = () => {
+  const socket=useSocket();
   const [allUsers, setAllUsers] = useState<any[]>([]);
   const [selectedUser, setSelectedUser] = useState<string | null>(null);
   const [messages, setMessages] = useState<any[]>([]);
