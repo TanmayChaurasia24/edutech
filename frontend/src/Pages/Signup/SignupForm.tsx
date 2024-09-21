@@ -81,11 +81,11 @@ export function SignupFormDemo() {
           </LabelInputContainer>
         </div>
         <LabelInputContainer className="mb-4">
-          <Label htmlFor="email">Phone Number</Label>
+          <Label htmlFor="string">Phone Number</Label>
           <Input
             id="email"
             placeholder="+91 123456789"
-            type="email"
+            type="string"
             onChange={(e) => {
               setData({ ...data, phoneNumber: e.target.value });
             }}

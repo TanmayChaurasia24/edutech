@@ -11,7 +11,7 @@ function App() {
         <Outlet /> {/* This is where the routed content will be rendered */}
       </main>
       {/* Optionally, add a Footer component here */}
-      <h1>Footer</h1>
+      {/* <h1>Footer</h1> */}
     </ThemeProvider>
 
   );

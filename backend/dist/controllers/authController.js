@@ -71,7 +71,7 @@ const Login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // Find the user by username
         const check_user = yield userModel_1.default.findOne({ username: username });
-        console.log("User found in database:", check_user);
+        // console.log("User found in database:", check_user);
         // If user is not found, return an error
         if (!check_user) {
             return res
@@ -115,6 +115,7 @@ exports.fetchAllTeachers = fetchAllTeachers;
 const fetchUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { userId } = req.params;
     try {
+        console.log("User Id", userId);
         const user = yield userModel_1.default.findById(userId);
         if (!user) {
             return res.status(404).json({
@@ -122,7 +123,7 @@ const fetchUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             });
         }
         else {
-            console.log(user);
+            // console.log("User",user)
             return res.status(200).json({
                 user
             });

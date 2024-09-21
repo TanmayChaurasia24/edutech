@@ -9,5 +9,5 @@ router.get('/all', courseController_js_1.fetchAllCourse);
 router.get("/enrolledCourses/:userId", userAuthenticate_1.authenticate, courseController_js_1.enrolledcourses);
 router.get('/:courseId/articles', userAuthenticate_1.authenticate, courseController_js_1.fetchCourseArticles);
 router.post('/:courseId/:studentId/add', userAuthenticate_1.authenticate, courseController_js_1.enrollStudentInCourse);
-router.post('/courseDelete', courseController_js_1.deleteCourse);
+router.delete('/courseDelete', courseController_js_1.deleteCourse);
 exports.default = router;
