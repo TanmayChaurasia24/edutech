@@ -80,6 +80,7 @@ const sendMessage = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         if (!message.success) {
             return res.status(400).json({
                 message: message.error.issues[0].message,
+                //this is backend write socket for this according to the frontend
             });
         }
         let conversation = yield conversationModel_1.default.findOne({
@@ -144,7 +145,7 @@ const extractMessages = (req, res) => __awaiter(void 0, void 0, void 0, function
         console.log("Received messageId:", messageId); // Log the messageId
         // Query by `_id` or custom `messageId`
         const message = yield messageModel_1.default.findOne({ _id: messageId }); // Adjust field if using a custom field
-        console.log("Message result:", message); // Log the message result
+        // console.log("Message result:", message); // Log the message result
         if (!message) {
             return res.status(404).json({
                 message: "Message not found",

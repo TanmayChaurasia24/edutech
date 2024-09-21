@@ -6,6 +6,7 @@ import Conversation from "../models/conversationModel";
 import mongoose from "mongoose";
 import { userSchema } from "../schemas/userSchema";
 import UserModel from "../models/userModel";
+import { Server } from "socket.io";
 
 export const fetchUsers = async (req: Request, res: Response) => {
   try {
@@ -72,6 +73,7 @@ export const sendMessage = async (req: Request, res: Response) => {
     if (!message.success) {
       return res.status(400).json({
         message: message.error.issues[0].message,
+        //this is backend write socket for this according to the frontend
       });
     }
     let conversation = await Conversation.findOne({
@@ -139,7 +141,7 @@ export const extractMessages = async (req: Request, res: Response) => {
     // Query by `_id` or custom `messageId`
     const message = await Message.findOne({ _id: messageId }); // Adjust field if using a custom field
 
-    console.log("Message result:", message); // Log the message result
+    // console.log("Message result:", message); // Log the message result
 
     if (!message) {
       return res.status(404).json({

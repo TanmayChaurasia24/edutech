@@ -1,4 +1,4 @@
-import ShineBorder from "../components/ui/shineborder";
+import ShineBorder from "./ui/shineborder";
 
 export function ShineBorderDemo() {
   return (

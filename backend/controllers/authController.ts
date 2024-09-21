@@ -67,7 +67,7 @@ export const Login = async (req: Request, res: Response) => {
   try {
     // Find the user by username
     const check_user = await UserModel.findOne({ username: username });
-    console.log("User found in database:", check_user);
+    // console.log("User found in database:", check_user);
 
     // If user is not found, return an error
     if (!check_user) {
@@ -125,7 +125,7 @@ export const fetchUser = async (req:Request,res:Response)=>{
       })
     }
     else{
-      console.log("User",user)
+      // console.log("User",user)
       return res.status(200).json({
         user
       })
