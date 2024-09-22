@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Sheet,
   SheetContent,
@@ -7,14 +7,14 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { useNavigate } from "react-router-dom"; // Add this to navigate on click
-import ProfilePic from "./ProfilePic";
-import { PlaceholdersAndVanishInputDemo } from "./Input";
 import { ShimmerButtonDemo } from "@/components/Shimmerbutton";
 import { Button } from "@/components/ui/button";
 import { Send } from "lucide-react";
 import { useSocket } from "@/context/SocketContext";
 import { useAuth } from "@/lib/AuthContext";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import ProfilePic from "./ProfilePic";
+import { PlaceholdersAndVanishInputDemo } from "./Input";
 
 const Chat = () => {
   const { socket } = useSocket();
@@ -22,10 +22,12 @@ const Chat = () => {
   const [allUsers, setAllUsers] = useState<any[]>([]);
   const [selectedUser, setSelectedUser] = useState<string | null>(null);
   const [messages, setMessages] = useState<any[]>([]);
-  // const [msg,setMsg]=useState<string>("");
   const [chatMessage, setChatMessage] = useState<string>("");
   const [receiverId, setReceiverId] = useState<string>("");
   const [currentUser, setCurrentUser] = useState<string>("");
+
+  // Create the ref for the scroll container
+  const containerRef = useRef<any>(null);
 
   const fetchData = async () => {
     try {
@@ -41,7 +43,6 @@ const Chat = () => {
       }
 
       const data = await response.json();
-      // console.log(data);
       setAllUsers(data.totalUsers);
     } catch (error) {
       console.error("Error fetching users:", error);
@@ -50,42 +51,33 @@ const Chat = () => {
 
   const handleSendMessage = async () => {
     if (socket) {
-      console.log("Sending message:", chatMessage);
-      console.log("UserID", user.userId);
-      console.log("ReceiverID", receiverId);
-      const newMessage={
-        senderId:user.userId,
-        receiverId:receiverId,
-        message:chatMessage
-      }
-      socket.emit("send_message",newMessage);
-      console.log("Message sent:", chatMessage);
-      setMessages((prevMessages)=>[...prevMessages,newMessage]);
+      const newMessage = {
+        senderId: user.userId,
+        receiverId: receiverId,
+        message: chatMessage,
+      };
+      socket.emit("send_message", newMessage);
+      setMessages((prevMessages) => [...prevMessages, newMessage]);
       setChatMessage("");
     }
   };
 
   useEffect(() => {
     if (socket && user.userId && receiverId) {
-      console.log("Setting up message listener...");
-        console.log(socket.id)
       socket.emit("fetch_messages", {
         senderId: user.userId,
         receiverId: receiverId,
       });
 
       socket.emit("join_room", user.userId);
-      
 
       socket.on("receive_message", (message) => {
-        console.log("Received message:", message);
+        console.log("In receive message socket",message);
         setMessages((prevMessages) => [...prevMessages, message]);
-      })
-
-      
+      });
 
       socket.on("messages", (messages) => {
-        console.log("Messages received:", messages);
+        console.log("In messages socket",messages);
         setMessages(messages);
       });
 
@@ -94,47 +86,6 @@ const Chat = () => {
       };
     }
   }, [socket, user.userId, receiverId]);
-
-  // const fetchMessages = async (receiverId: string) => {
-  //   try {
-  //     const response = await fetch(
-  //       `/api/message/fetchmessages/${localStorage.getItem(
-  //         "userId"
-  //       )}/${receiverId}`,
-  //       {
-  //         method: "GET",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Authorization: "Bearer " + localStorage.getItem("token"),
-  //         },
-  //       }
-  //     );
-
-  //     // Handle non-OK responses
-  //     if (!response.ok) {
-  //       if (response.status === 404) {
-  //         console.log("No messages found.");
-  //         setMessages([]); // Set empty messages array when 404
-  //         return;
-  //       }
-  //       throw new Error(`HTTP error! status: ${response.status}`);
-  //     }
-
-  //     const data = await response.json();
-
-  //     // Handle case when no messages exist (null, empty, etc.)
-  //     if (!data || !data.messages || data.messages.length === 0) {
-  //       setMessages([]); // Set to empty array when no messages found
-  //       return;
-  //     }
-
-  //     // If messages are found, set them
-  //     setMessages(data.messages);
-  //     console.log("Messages:", data.messages);
-  //   } catch (error) {
-  //     console.error("Error fetching messages:", error);
-  //   }
-  // };
 
   const currentUserfun = async (userId: string) => {
     const response = await fetch(`/api/user/currentuser/${userId}`, {
@@ -145,13 +96,11 @@ const Chat = () => {
       },
     });
     const data = await response.json();
-    console.log("Current User:", data.user.username);
     setCurrentUser(data.user.username);
   };
 
   const handleUserClick = (userId: string) => {
     setSelectedUser(userId);
-    // fetchMessages(userId);
     setReceiverId(userId);
     currentUserfun(userId);
   };
@@ -160,10 +109,21 @@ const Chat = () => {
     setSelectedUser(null);
   };
 
+  // Set up the scroll handler inside useEffect
   useEffect(() => {
     fetchData();
-    handleSendMessage();
   }, []);
+
+  const chatEndRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  // Scroll to bottom every time messages change
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages,selectedUser]);
 
   return (
     <div className="flex items-center justify-center h-full mx-auto relative">
@@ -179,11 +139,10 @@ const Chat = () => {
                   <PlaceholdersAndVanishInputDemo />
                 </div>
                 <div className="flex flex-col justify-between">
-                  {/* Chat content */}
                   {allUsers.map((user: any) => (
                     <div
                       key={user._id}
-                      onClick={() => handleUserClick(user._id)} // Handle user click
+                      onClick={() => handleUserClick(user._id)}
                       className="flex flex-row items-center hover:bg-slate-100 dark:hover:bg-slate-800 hover:cursor-pointer rounded p-2"
                     >
                       <ProfilePic />
@@ -201,7 +160,7 @@ const Chat = () => {
                 </div>
               </div>
             ) : (
-              <div className="flex flex-col h-auto gap-2">
+              <div className="flex flex-col h-[100rem] gap-2">
                 <div className="h-[48rem] w-auto mt-2 border">
                   <div className="navbar flex flex-row items-center justify-between border border-bottom-0 border-slate-200 dark:border-slate-800 p-4">
                     <div className="flex flex-row items-center gap-2">
@@ -218,16 +177,24 @@ const Chat = () => {
                       Back
                     </Button>
                   </div>
-                  <div className="flex flex-col h-[35rem] justify-end items-end gap-2 p-4">
-                    {messages.map((message: any, index: number) => (
-                      <div
-                        key={index}
-                        className="flex flex-col gap-2 p-3 border rounded-lg"
-                      >
-                        <h1>{message.message}</h1>
-                      </div>
-                    ))}
-                  </div>
+
+                  <ScrollArea className="flex h-[43rem] w-[21rem] rounded-md border p-4 overflow-y-auto">
+                    <div className="flex flex-col gap-4" >
+                      {messages.map((message: any, index: number) => (
+                        <div
+                        ref={chatEndRef}
+                          key={index}
+                          className={`flex flex-col gap-2 w-[10rem] p-3 border rounded-lg ${
+                            message.senderId === user.userId
+                              ? "bg-indigo-400 self-end"
+                              : "self-start"
+                          }`}
+                        >
+                          <h1>{message.message}</h1>
+                        </div>
+                      ))}
+                    </div>
+                  </ScrollArea>
                 </div>
                 <div className="flex flex-row items-center justify-center border">
                   <input
@@ -238,7 +205,7 @@ const Chat = () => {
                     onKeyDown={(e) => {
                       if (e.key === "Enter") {
                         handleSendMessage();
-                        e.preventDefault(); 
+                        e.preventDefault();
                       }
                     }}
                   />
